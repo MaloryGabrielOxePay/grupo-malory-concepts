@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v04 · Atomic Orbit — Grupo Malory</title>
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+body { background: var(--canvas-deep); color: var(--paper); }
+.atom {
+  position: relative; width: 100vw; height: 100vh; overflow: hidden;
+  background:
+    radial-gradient(circle at center, oklch(0.25 0.14 262 / 0.6) 0%, oklch(0.10 0.04 260) 60%, var(--canvas-deep) 100%);
+  perspective: 1400px;
+}
+.scene {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  transform-style: preserve-3d;
+}
+.nucleus {
+  position: relative;
+  z-index: 20;
+  padding: 28px 36px;
+  background: oklch(0.14 0.04 262 / 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid oklch(0.7 0.18 262 / 0.4);
+  border-radius: 4px;
+  box-shadow:
+    0 0 80px oklch(0.45 0.22 262 / 0.5),
+    0 0 160px oklch(0.45 0.22 262 / 0.3),
+    inset 0 1px 0 oklch(1 0 0 / 0.1);
+}
+.nucleus img { width: 280px; max-width: 60vw; filter: drop-shadow(0 4px 30px oklch(0.45 0.22 262 / 0.7)); }
+
+.orbit {
+  position: absolute; top: 50%; left: 50%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+.orbit::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed oklch(0.65 0.12 260 / 0.18);
+}
+
+.o1 { animation: spin1 28s linear infinite; transform: translate(-50%, -50%) rotateX(70deg) rotateY(0deg); }
+.o1::before { width: 380px; height: 380px; }
+.o2 { animation: spin2 42s linear infinite reverse; transform: translate(-50%, -50%) rotateX(60deg) rotateY(30deg); }
+.o2::before { width: 540px; height: 540px; }
+.o3 { animation: spin3 58s linear infinite; transform: translate(-50%, -50%) rotateX(75deg) rotateY(-20deg); }
+.o3::before { width: 700px; height: 700px; }
+.o4 { animation: spin4 72s linear infinite reverse; transform: translate(-50%, -50%) rotateX(65deg) rotateY(60deg); }
+.o4::before { width: 880px; height: 880px; }
+.o5 { animation: spin5 90s linear infinite; transform: translate(-50%, -50%) rotateX(55deg) rotateY(-50deg); }
+.o5::before { width: 1080px; height: 1080px; }
+
+@keyframes spin1 { to { transform: translate(-50%, -50%) rotateX(70deg) rotateY(0deg) rotateZ(360deg) } }
+@keyframes spin2 { to { transform: translate(-50%, -50%) rotateX(60deg) rotateY(30deg) rotateZ(360deg) } }
+@keyframes spin3 { to { transform: translate(-50%, -50%) rotateX(75deg) rotateY(-20deg) rotateZ(360deg) } }
+@keyframes spin4 { to { transform: translate(-50%, -50%) rotateX(65deg) rotateY(60deg) rotateZ(360deg) } }
+@keyframes spin5 { to { transform: translate(-50%, -50%) rotateX(55deg) rotateY(-50deg) rotateZ(360deg) } }
+
+.electron {
+  position: absolute;
+  top: 50%; left: 50%;
+  pointer-events: auto;
+  z-index: 15;
+  display: flex; flex-direction: column; align-items: center;
+  text-decoration: none; color: var(--paper);
+  animation: counterSpin 28s linear infinite;
+  transform-origin: 0 0;
+}
+.o1 .electron { transform: translate(190px, 0) rotateX(-70deg); }
+.o2 .electron { transform: translate(270px, 0) rotateX(-60deg) rotateY(-30deg); animation-duration: 42s; animation-direction: reverse; }
+.o3 .electron { transform: translate(350px, 0) rotateX(-75deg) rotateY(20deg); animation-duration: 58s; }
+.o4 .electron { transform: translate(440px, 0) rotateX(-65deg) rotateY(-60deg); animation-duration: 72s; animation-direction: reverse; }
+.o5 .electron { transform: translate(540px, 0) rotateX(-55deg) rotateY(50deg); animation-duration: 90s; }
+
+@keyframes counterSpin { to { transform: translate(var(--tx,190px), 0) rotateX(-70deg) rotateZ(-360deg) } }
+
+.electron .dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--c, var(--malory-light));
+  box-shadow: 0 0 16px var(--c, var(--malory-light)), 0 0 32px var(--c, var(--malory-light));
+}
+.electron .pill {
+  margin-top: 10px;
+  padding: 4px 10px;
+  background: oklch(0.10 0.02 260 / 0.85);
+  border: 1px solid oklch(0.7 0.12 260 / 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 100px;
+  font-family: 'Italiana', serif;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0.85;
+  transition: opacity 0.4s, transform 0.4s var(--ease-out-quart);
+}
+.electron:hover .pill { opacity: 1; transform: scale(1.06); }
+
+.b-connect .dot { background: var(--c-connect); box-shadow: 0 0 16px var(--c-connect), 0 0 32px var(--c-connect); }
+.b-oxepay .dot { background: var(--c-oxepay); box-shadow: 0 0 16px var(--c-oxepay), 0 0 32px var(--c-oxepay); }
+.b-wowlog .dot { background: var(--c-wowlog); box-shadow: 0 0 16px var(--c-wowlog), 0 0 32px var(--c-wowlog); }
+.b-entret .dot { background: var(--c-entret); box-shadow: 0 0 16px var(--c-entret), 0 0 32px var(--c-entret); }
+.b-iai .dot { background: var(--c-iai); box-shadow: 0 0 16px var(--c-iai), 0 0 32px var(--c-iai); }
+
+.eyebrow-top {
+  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+  color: oklch(0.7 0.08 258); z-index: 30;
+}
+.tagline-bot {
+  position: absolute; bottom: 64px; left: 50%; transform: translateX(-50%);
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: var(--t-lg);
+  color: oklch(0.85 0.06 258);
+  z-index: 30;
+  text-align: center;
+}
+.tagline-bot .small {
+  display: block;
+  margin-top: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: oklch(0.55 0.06 258);
+  text-transform: uppercase;
+}
+
+@media (max-width: 800px) {
+  .nucleus img { width: 200px; }
+  .o5::before { width: 760px; height: 760px; } .o5 .electron { transform: translate(380px, 0) rotateX(-55deg) rotateY(50deg); }
+  .o4::before { width: 620px; height: 620px; } .o4 .electron { transform: translate(310px, 0) rotateX(-65deg) rotateY(-60deg); }
+  .o3::before { width: 500px; height: 500px; } .o3 .electron { transform: translate(250px, 0) rotateX(-75deg) rotateY(20deg); }
+  .o2::before { width: 380px; height: 380px; } .o2 .electron { transform: translate(190px, 0) rotateX(-60deg) rotateY(-30deg); }
+  .o1::before { width: 280px; height: 280px; } .o1 .electron { transform: translate(140px, 0) rotateX(-70deg); }
+  .electron .pill { font-size: 11px; padding: 3px 8px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="version-nav"><a href="../index.html">×</a><a href="../v01/index.html">01</a><a href="../v02/index.html">02</a><a href="../v03/index.html">03</a><a href="../v04/index.html">04</a><a href="../v05/index.html">05</a><a href="../v06/index.html">06</a><a href="../v07/index.html">07</a><a href="../v08/index.html">08</a><a href="../v09/index.html">09</a><a href="../v10/index.html">10</a></nav>
+
+<section class="atom">
+  <div class="eyebrow-top eyebrow fade-in">— estrutura atômica · 5 elétrons</div>
+  <div class="scene" data-parallax="0.15">
+    <div class="orbit o1"><a class="electron b-connect" href="https://maloryconnect.com"><span class="dot"></span><span class="pill">Malory Connect</span></a></div>
+    <div class="orbit o2"><a class="electron b-oxepay" href="https://useoxepay.com.br"><span class="dot"></span><span class="pill">OxePay</span></a></div>
+    <div class="orbit o3"><a class="electron b-wowlog" href="https://wowlognow.com"><span class="dot"></span><span class="pill">WowLog</span></a></div>
+    <div class="orbit o4"><a class="electron b-entret" href="https://entretenimento.grupomalory.com"><span class="dot"></span><span class="pill">Malory Entretenimento</span></a></div>
+    <div class="orbit o5"><a class="electron b-iai" href="https://iai.grupomalory.com"><span class="dot"></span><span class="pill">Iaí</span></a></div>
+    <div class="nucleus fade-in"><img src="../assets/logos/grupo-malory.png" alt="Grupo Malory"></div>
+  </div>
+  <div class="tagline-bot fade-in">o núcleo de tudo<span class="small">·  ·  ·</span></div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="../shared/init.js"></script>
+</body>
+</html>
