@@ -68,7 +68,9 @@ body { background: oklch(0.10 0.04 260); color: var(--paper); }
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   text-decoration: none; color: var(--paper);
   transition: all 0.6s var(--ease-out-quart);
+  opacity: 0;                /* hidden until GSAP fades in (prevents FOUC flash) */
 }
+.center-disc { opacity: 0; } /* same — revealed by gsap.to below */
 .cardinal:hover { transform: var(--hover-tx, scale(1.06)); }
 .cardinal .deg {
   font-family: 'JetBrains Mono', monospace;
@@ -271,8 +273,10 @@ for (let i = 0; i < 72; i++) {
 }
 ticks.innerHTML = html;
 
-gsap.from('.cardinal', { opacity: 0, scale: 0.85, duration: 1.4, stagger: 0.13, delay: 0.5, ease: 'expo.out' });
-gsap.from('.center-disc', { opacity: 0, scale: 0.6, duration: 1.8, delay: 0.2, ease: 'expo.out' });
+// gsap.to (not from) because CSS opacity:0 already locks elements hidden — prevents FOUC flash.
+// Skip scale animation on positioned elements to avoid overriding their CSS transform (translateX/Y).
+gsap.to('.center-disc', { opacity: 1, duration: 1.6, delay: 0.15, ease: 'expo.out' });
+gsap.to('.cardinal',    { opacity: 1, duration: 1.4, stagger: 0.13, delay: 0.45, ease: 'expo.out' });
 </script>
 </body>
 </html>

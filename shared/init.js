@@ -59,27 +59,33 @@
     // Hero reveal (fades + char-stagger). Selector .hero-reveal text gets split.
     if (typeof gsap !== 'undefined') {
       gsap.utils.toArray('.fade-in').forEach((el, i) => {
-        gsap.from(el, {
-          opacity: 0,
-          y: 30,
-          duration: 1.4,
-          delay: 0.2 + i * 0.1,
-          ease: 'expo.out',
-        });
+        gsap.fromTo(el,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.4,
+            delay: 0.2 + i * 0.1,
+            ease: 'expo.out',
+          }
+        );
       });
 
       gsap.utils.toArray('.reveal').forEach((el) => {
-        gsap.from(el, {
-          opacity: 0,
-          y: 60,
-          duration: 1.6,
-          ease: 'expo.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(el,
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.6,
+            ease: 'expo.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       });
     }
 

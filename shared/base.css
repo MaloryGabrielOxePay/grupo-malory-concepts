@@ -102,3 +102,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   .version-nav a { padding: 4px 7px; }
 }
 .version-nav.dark-on-light { background: oklch(0.18 0.02 260 / 0.92); }
+
+/* Prevent FOUC — elements animated by GSAP start hidden via CSS,
+   then are revealed by gsap.fromTo / gsap.to in shared/init.js or per-version scripts. */
+.fade-in, .reveal { opacity: 0; }
