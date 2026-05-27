@@ -3,112 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>v08 · Vintage Compass — Grupo Malory</title>
+<title>v08 · Compass — Grupo Malory</title>
 <link rel="stylesheet" href="../shared/base.css">
 <style>
-body { background: oklch(0.13 0.03 80); color: oklch(0.92 0.04 80); }
+body { background: oklch(0.10 0.04 260); color: var(--paper); }
 .compass-page {
   position: relative; width: 100vw; height: 100vh; overflow: hidden;
   background:
-    radial-gradient(ellipse at center, oklch(0.18 0.05 80) 0%, oklch(0.10 0.03 75) 70%, oklch(0.07 0.02 70) 100%);
+    radial-gradient(ellipse at center, oklch(0.18 0.10 262) 0%, oklch(0.12 0.06 260) 55%, oklch(0.07 0.025 258) 100%);
 }
-.parchment-grain {
+.grain {
   position: absolute; inset: 0; pointer-events: none;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0 0.3 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.45 0 0 0 0 0.9 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   mix-blend-mode: screen;
+}
+.aurora {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 30% at 50% 20%, oklch(0.55 0.20 262 / 0.18), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 80%, oklch(0.45 0.22 262 / 0.22), transparent 70%);
 }
 
 .compass {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 720px; height: 720px; max-width: 90vw; max-height: 90vw;
+  width: 760px; height: 760px; max-width: 92vw; max-height: 92vw;
 }
 .compass-rose {
   position: absolute; inset: 0;
-  animation: roseRotate 120s linear infinite;
+  animation: roseRotate 140s linear infinite;
 }
 @keyframes roseRotate { to { transform: rotate(360deg) } }
 .compass-rose svg { width: 100%; height: 100%; }
 
+/* Central white disc with logo */
 .center-disc {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   z-index: 10;
-  width: 220px; height: 220px;
+  width: 260px; height: 260px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, oklch(0.22 0.06 75) 0%, oklch(0.13 0.03 70) 80%);
-  border: 1px solid oklch(0.7 0.12 78 / 0.6);
+  background:
+    radial-gradient(circle at 50% 40%, oklch(0.99 0.006 260) 0%, oklch(0.95 0.012 258) 80%, oklch(0.90 0.022 258) 100%);
+  border: 1px solid oklch(0.55 0.20 262 / 0.6);
   box-shadow:
-    0 0 60px oklch(0.7 0.14 78 / 0.3),
-    inset 0 2px 0 oklch(0.85 0.14 78 / 0.4),
-    inset 0 -10px 30px oklch(0 0 0 / 0.5);
+    0 0 80px oklch(0.55 0.22 262 / 0.45),
+    0 0 160px oklch(0.45 0.22 262 / 0.25),
+    inset 0 2px 0 oklch(1 0 0 / 0.9),
+    inset 0 -16px 32px oklch(0.45 0.22 262 / 0.1);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
+  padding: 24px;
 }
-.center-disc img { width: 170px; filter: brightness(1.05); }
+.center-disc img {
+  width: 100%;
+  height: auto;
+  max-width: 200px;
+  display: block;
+}
 
+/* Brand at cardinal point */
 .cardinal {
   position: absolute;
   z-index: 15;
-  display: flex; flex-direction: column; align-items: center;
-  text-decoration: none; color: oklch(0.92 0.06 78);
-  font-family: 'Italiana', serif;
-  font-style: italic;
-  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  text-decoration: none; color: var(--paper);
   transition: all 0.6s var(--ease-out-quart);
 }
-.cardinal:hover { transform: var(--hover-transform); color: oklch(0.95 0.16 80); }
+.cardinal:hover { transform: var(--hover-tx, scale(1.06)); }
 .cardinal .deg {
   font-family: 'JetBrains Mono', monospace;
-  font-style: normal;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  color: oklch(0.7 0.12 78 / 0.7);
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: oklch(0.7 0.14 260 / 0.85);
   text-transform: uppercase;
-  margin-bottom: 4px;
 }
-.cardinal .name {
-  font-size: 22px;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
+.cardinal .logo {
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 8px 24px oklch(0 0 0 / 0.45));
+  transition: filter 0.5s var(--ease-out-quart);
+}
+.cardinal:hover .logo { filter: drop-shadow(0 12px 32px oklch(0.55 0.22 262 / 0.6)); }
+.cardinal .logo img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  display: block;
 }
 .cardinal .domain {
   font-family: 'JetBrains Mono', monospace;
-  font-style: normal;
   font-size: 9px;
-  letter-spacing: 0.18em;
-  color: oklch(0.7 0.12 78 / 0.55);
-  margin-top: 6px;
+  letter-spacing: 0.2em;
+  color: oklch(0.7 0.14 260 / 0.55);
   opacity: 0;
   transition: opacity 0.4s;
 }
 .cardinal:hover .domain { opacity: 1; }
 
-.c-n { top: 6%; left: 50%; transform: translateX(-50%); --hover-transform: translateX(-50%) translateY(-4px); }
-.c-s { bottom: 6%; left: 50%; transform: translateX(-50%); --hover-transform: translateX(-50%) translateY(4px); }
-.c-e { top: 50%; right: 4%; transform: translateY(-50%); text-align: right; --hover-transform: translateY(-50%) translateX(4px); }
-.c-w { top: 50%; left: 4%; transform: translateY(-50%); text-align: left; --hover-transform: translateY(-50%) translateX(-4px); }
-.c-ne { top: 18%; right: 14%; --hover-transform: translate(4px,-4px); }
+/* Position + sizing per brand */
+.c-n { top: 4%; left: 50%; transform: translateX(-50%); --hover-tx: translateX(-50%) translateY(-6px); }
+.c-n .logo { width: 180px; }
+.c-n:hover .logo { width: 180px; }
 
-.eyebrow-top {
-  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
-  color: oklch(0.7 0.12 78); z-index: 20;
+.c-ne { top: 14%; right: 6%; --hover-tx: translate(6px,-6px); }
+.c-ne .logo { width: 140px; }
+
+.c-e { top: 50%; right: 3%; transform: translateY(-50%); --hover-tx: translateY(-50%) translateX(6px); }
+.c-e .logo { width: 170px; }
+
+.c-w { top: 50%; left: 3%; transform: translateY(-50%); --hover-tx: translateY(-50%) translateX(-6px); }
+.c-w .logo { width: 220px; }
+
+.c-s { bottom: 5%; left: 50%; transform: translateX(-50%); --hover-tx: translateX(-50%) translateY(6px); }
+.c-s .logo { width: 220px; }
+
+/* Iaí stylized wordmark (no PNG yet) */
+.iai-mark {
+  display: inline-flex; align-items: baseline;
+  padding: 8px 16px;
+  background: oklch(0.92 0.18 95);
+  border-radius: 6px;
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: oklch(0.18 0.16 25);
+  border: 3px solid oklch(0.18 0.16 25);
+  box-shadow: 4px 4px 0 oklch(0.55 0.22 30);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  transform: rotate(-3deg);
 }
+.iai-mark .lc { font-size: 28px; }
+.iai-mark .uc { font-size: 40px; font-weight: 600; margin-left: 2px; }
+
 .foot {
-  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
   font-family: 'Italiana', serif;
   font-style: italic;
   font-size: 14px;
-  color: oklch(0.7 0.12 78 / 0.6);
+  color: oklch(0.7 0.14 260 / 0.6);
   z-index: 20;
+  white-space: nowrap;
 }
 
-@media (max-width: 800px) {
-  .compass { width: 460px; height: 460px; }
-  .center-disc { width: 160px; height: 160px; }
-  .center-disc img { width: 120px; }
-  .cardinal .name { font-size: 16px; }
-  .c-ne { top: 14%; right: 6% }
+@media (max-width: 820px) {
+  .compass { width: 540px; height: 540px; }
+  .center-disc { width: 180px; height: 180px; padding: 16px }
+  .c-n .logo { width: 130px }
+  .c-ne .logo { width: 90px }
+  .c-e .logo { width: 110px }
+  .c-w .logo { width: 150px }
+  .c-s .logo { width: 150px }
+  .iai-mark .lc { font-size: 22px }
+  .iai-mark .uc { font-size: 32px }
+}
+@media (max-width: 480px) {
+  .compass { width: 380px; height: 380px; }
+  .center-disc { width: 140px; height: 140px; padding: 12px }
+  .c-n .logo { width: 100px }
+  .c-ne { top: 11%; right: 3% }
+  .c-ne .logo { width: 68px }
+  .c-e .logo { width: 80px }
+  .c-w .logo { width: 110px }
+  .c-s .logo { width: 120px }
+  .cardinal .deg { font-size: 8px }
+  .iai-mark { padding: 5px 10px; border-width: 2px; box-shadow: 3px 3px 0 oklch(0.55 0.22 30) }
+  .iai-mark .lc { font-size: 18px }
+  .iai-mark .uc { font-size: 24px }
+  .foot { font-size: 12px }
 }
 </style>
 </head>
@@ -117,33 +178,36 @@ body { background: oklch(0.13 0.03 80); color: oklch(0.92 0.04 80); }
 <nav class="version-nav"><a href="../index.html">×</a><a href="../v01/index.html">01</a><a href="../v02/index.html">02</a><a href="../v03/index.html">03</a><a href="../v04/index.html">04</a><a href="../v05/index.html">05</a><a href="../v06/index.html">06</a><a href="../v07/index.html">07</a><a href="../v08/index.html">08</a><a href="../v09/index.html">09</a><a href="../v10/index.html">10</a></nav>
 
 <section class="compass-page">
-  <div class="parchment-grain"></div>
-
-  <div class="eyebrow-top eyebrow fade-in">— rosa dos negócios · cinco direções</div>
+  <div class="aurora"></div>
+  <div class="grain"></div>
 
   <div class="compass">
     <div class="compass-rose">
-      <svg viewBox="0 0 720 720">
+      <svg viewBox="0 0 760 760">
         <defs>
-          <radialGradient id="ringGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="80%" stop-color="oklch(0.7 0.14 78)" stop-opacity="0"/>
-            <stop offset="100%" stop-color="oklch(0.7 0.14 78)" stop-opacity="0.5"/>
-          </radialGradient>
+          <linearGradient id="rayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="oklch(0.7 0.16 260 / 0.0)"/>
+            <stop offset="100%" stop-color="oklch(0.7 0.16 260 / 0.65)"/>
+          </linearGradient>
+          <linearGradient id="raySoft" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="oklch(0.55 0.14 260 / 0.0)"/>
+            <stop offset="100%" stop-color="oklch(0.55 0.14 260 / 0.35)"/>
+          </linearGradient>
         </defs>
-        <circle cx="360" cy="360" r="350" fill="none" stroke="oklch(0.7 0.14 78 / 0.4)" stroke-width="1"/>
-        <circle cx="360" cy="360" r="320" fill="none" stroke="oklch(0.7 0.14 78 / 0.3)" stroke-width="1" stroke-dasharray="2 4"/>
-        <circle cx="360" cy="360" r="280" fill="none" stroke="oklch(0.7 0.14 78 / 0.2)" stroke-width="1"/>
-        <!-- Cardinal points -->
-        <polygon points="360,40 350,360 370,360" fill="oklch(0.7 0.14 78 / 0.6)"/>
-        <polygon points="360,680 350,360 370,360" fill="oklch(0.7 0.14 78 / 0.3)"/>
-        <polygon points="40,360 360,350 360,370" fill="oklch(0.7 0.14 78 / 0.3)"/>
-        <polygon points="680,360 360,350 360,370" fill="oklch(0.7 0.14 78 / 0.3)"/>
-        <!-- NE diagonal -->
-        <polygon points="586,134 354,358 366,370" fill="oklch(0.7 0.14 78 / 0.35)"/>
-        <!-- Degree marks -->
-        <g stroke="oklch(0.7 0.14 78 / 0.5)" stroke-width="1">
-          <g id="ticks"></g>
-        </g>
+        <!-- Outer rings -->
+        <circle cx="380" cy="380" r="370" fill="none" stroke="oklch(0.55 0.18 260 / 0.35)" stroke-width="1"/>
+        <circle cx="380" cy="380" r="340" fill="none" stroke="oklch(0.55 0.18 260 / 0.22)" stroke-width="1" stroke-dasharray="2 4"/>
+        <circle cx="380" cy="380" r="300" fill="none" stroke="oklch(0.55 0.18 260 / 0.15)" stroke-width="1"/>
+        <circle cx="380" cy="380" r="200" fill="none" stroke="oklch(0.55 0.18 260 / 0.10)" stroke-width="1" stroke-dasharray="1 6"/>
+        <!-- Cardinal rays (4 main) -->
+        <polygon points="380,40 370,380 390,380" fill="url(#rayGrad)"/>
+        <polygon points="380,720 370,380 390,380" fill="url(#raySoft)" transform="rotate(180 380 380)"/>
+        <polygon points="40,380 380,370 380,390" fill="url(#raySoft)" transform="rotate(-90 380 380)"/>
+        <polygon points="720,380 380,370 380,390" fill="url(#raySoft)" transform="rotate(90 380 380)"/>
+        <!-- NE diagonal ray (for Iaí) -->
+        <polygon points="380,40 370,380 390,380" fill="url(#raySoft)" transform="rotate(45 380 380)" opacity="0.7"/>
+        <!-- Degree ticks -->
+        <g stroke="oklch(0.65 0.18 260 / 0.5)" stroke-width="1" id="ticks"></g>
       </svg>
     </div>
     <div class="center-disc">
@@ -152,19 +216,35 @@ body { background: oklch(0.13 0.03 80); color: oklch(0.92 0.04 80); }
   </div>
 
   <a href="https://maloryconnect.com" class="cardinal c-n">
-    <span class="deg">N · 000°</span><span class="name">Malory Connect</span><span class="domain">maloryconnect.com</span>
+    <span class="deg">N · 000°</span>
+    <div class="logo"><img src="../assets/logos/malory-connect.png" alt="Malory Connect"></div>
+    <span class="domain">maloryconnect.com</span>
   </a>
-  <a href="https://useoxepay.com.br" class="cardinal c-ne">
-    <span class="deg">NE · 045°</span><span class="name">OxePay</span><span class="domain">useoxepay.com.br</span>
+
+  <a href="https://iai.grupomalory.com" class="cardinal c-ne">
+    <span class="deg">NE · 045°</span>
+    <div class="logo">
+      <span class="iai-mark"><span class="lc">i</span><span class="uc">AÍ</span></span>
+    </div>
+    <span class="domain">iai.grupomalory.com</span>
   </a>
+
   <a href="https://wowlognow.com" class="cardinal c-e">
-    <span class="deg">L · 090°</span><span class="name">WowLog</span><span class="domain">wowlognow.com</span>
+    <span class="deg">L · 090°</span>
+    <div class="logo"><img src="../assets/logos/wowlog.png" alt="WOW Logistics"></div>
+    <span class="domain">wowlognow.com</span>
   </a>
-  <a href="https://entretenimento.grupomalory.com" class="cardinal c-s">
-    <span class="deg">S · 180°</span><span class="name">Malory Entretenimento</span><span class="domain">entretenimento.grupomalory.com</span>
+
+  <a href="https://entretenimento.grupomalory.com" class="cardinal c-w">
+    <span class="deg">O · 270°</span>
+    <div class="logo"><img src="../assets/logos/malory-entretenimento-light.png" alt="Malory Entretenimento"></div>
+    <span class="domain">entretenimento.grupomalory.com</span>
   </a>
-  <a href="https://iai.grupomalory.com" class="cardinal c-w">
-    <span class="deg">O · 270°</span><span class="name">Iaí</span><span class="domain">iai.grupomalory.com</span>
+
+  <a href="https://useoxepay.com.br" class="cardinal c-s">
+    <span class="deg">S · 180°</span>
+    <div class="logo"><img src="../assets/logos/oxepay.png" alt="OxePay"></div>
+    <span class="domain">useoxepay.com.br</span>
   </a>
 
   <div class="foot fade-in">aponte para qualquer direção</div>
@@ -175,22 +255,24 @@ body { background: oklch(0.13 0.03 80); color: oklch(0.92 0.04 80); }
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="../shared/init.js"></script>
 <script>
-// Generate degree tick marks
+// Generate degree tick marks (every 5°, bigger every 30°)
 const ticks = document.getElementById('ticks');
 let html = '';
 for (let i = 0; i < 72; i++) {
   const a = (i * 5) * Math.PI / 180;
-  const r1 = i % 6 === 0 ? 340 : 348;
-  const r2 = 354;
-  const x1 = 360 + Math.cos(a)*r1;
-  const y1 = 360 + Math.sin(a)*r1;
-  const x2 = 360 + Math.cos(a)*r2;
-  const y2 = 360 + Math.sin(a)*r2;
-  html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+  const r1 = i % 6 === 0 ? 350 : 360;
+  const r2 = 368;
+  const x1 = 380 + Math.cos(a)*r1;
+  const y1 = 380 + Math.sin(a)*r1;
+  const x2 = 380 + Math.cos(a)*r2;
+  const y2 = 380 + Math.sin(a)*r2;
+  const op = i % 6 === 0 ? 0.7 : 0.35;
+  html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-opacity="${op}"/>`;
 }
 ticks.innerHTML = html;
 
-gsap.from('.cardinal', { opacity: 0, scale: 0.8, duration: 1.4, stagger: 0.14, delay: 0.7, ease: 'expo.out' });
+gsap.from('.cardinal', { opacity: 0, scale: 0.85, duration: 1.4, stagger: 0.13, delay: 0.5, ease: 'expo.out' });
+gsap.from('.center-disc', { opacity: 0, scale: 0.6, duration: 1.8, delay: 0.2, ease: 'expo.out' });
 </script>
 </body>
 </html>
