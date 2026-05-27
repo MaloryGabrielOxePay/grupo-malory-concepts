@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v09 · Glass Halo — Grupo Malory</title>
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+body { background: oklch(0.97 0.008 260); color: var(--ink); }
+.halo-page {
+  position: relative; width: 100vw; height: 100vh; overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 50%, oklch(0.99 0.006 260) 0%, oklch(0.95 0.014 258) 60%, oklch(0.90 0.022 256) 100%);
+}
+.luminance {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 30%, oklch(1 0 0 / 0.6), transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 80%, oklch(0.7 0.16 260 / 0.18), transparent 70%);
+}
+
+.halo-wrap {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 780px; height: 780px; max-width: 88vw; max-height: 88vw;
+}
+.halo-ring {
+  position: absolute; inset: 0;
+  animation: haloRotate 80s linear infinite;
+}
+.halo-ring::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      oklch(0.7 0.18 262 / 0.4) 60deg,
+      transparent 120deg,
+      oklch(0.7 0.18 262 / 0.3) 180deg,
+      transparent 240deg,
+      oklch(0.7 0.18 262 / 0.35) 300deg,
+      transparent 360deg
+    );
+  -webkit-mask: radial-gradient(circle, transparent 47%, #000 48%, #000 49.5%, transparent 50%);
+  mask: radial-gradient(circle, transparent 47%, #000 48%, #000 49.5%, transparent 50%);
+}
+.halo-ring::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 1px solid oklch(0.45 0.22 262 / 0.18);
+}
+@keyframes haloRotate { to { transform: rotate(360deg) } }
+
+.inner-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 92%; height: 92%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed oklch(0.45 0.22 262 / 0.12);
+  animation: haloRotate 140s linear infinite reverse;
+}
+
+.center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 15;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.logo-pane {
+  position: relative;
+  padding: 36px 44px;
+  background: oklch(1 0 0 / 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid oklch(1 0 0 / 0.8);
+  border-radius: 4px;
+  box-shadow:
+    0 30px 80px -32px oklch(0.45 0.22 262 / 0.4),
+    inset 0 1px 0 oklch(1 0 0 / 1),
+    inset 0 -1px 0 oklch(0.45 0.22 262 / 0.1);
+}
+.logo-pane img { width: 280px; max-width: 55vw; }
+.center .tag {
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: var(--t-lg);
+  color: var(--malory-deep);
+}
+
+/* Pendants - hanging brand cards on the ring */
+.pendant {
+  position: absolute;
+  z-index: 12;
+  display: flex; flex-direction: column; align-items: center;
+  text-decoration: none; color: var(--ink);
+  animation: pendantSwing 6s ease-in-out infinite;
+  transform-origin: top center;
+}
+.pendant:nth-of-type(2n) { animation-delay: -2s; }
+.pendant:nth-of-type(3n) { animation-delay: -4s; }
+@keyframes pendantSwing {
+  0%,100% { transform: rotate(-1deg) }
+  50% { transform: rotate(1deg) }
+}
+.pendant .chain {
+  width: 1px; height: 28px;
+  background: linear-gradient(180deg, transparent, oklch(0.45 0.22 262 / 0.4));
+}
+.pendant .gem {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, oklch(1 0 0 / 0.7), var(--c, var(--malory-light)) 60%, oklch(0.3 0.15 262) 100%);
+  border: 1px solid oklch(1 0 0 / 0.6);
+  box-shadow:
+    0 8px 24px -8px var(--c, var(--malory-royal)),
+    inset 0 -8px 16px oklch(0 0 0 / 0.25),
+    inset 0 4px 8px oklch(1 0 0 / 0.5);
+  display: flex; align-items: center; justify-content: center;
+  color: oklch(0.10 0.04 260);
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: 20px;
+}
+.pendant .tag-pill {
+  margin-top: 10px;
+  padding: 5px 12px;
+  background: oklch(1 0 0 / 0.7);
+  border: 1px solid oklch(0.45 0.22 262 / 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 100px;
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--malory-deep);
+  white-space: nowrap;
+  transition: all 0.5s var(--ease-out-quart);
+}
+.pendant:hover .tag-pill {
+  background: var(--paper);
+  border-color: var(--malory-royal);
+  transform: translateY(2px);
+}
+
+.p-connect { top: 22%; left: 16%; --c: var(--c-connect); }
+.p-oxepay { top: 18%; right: 18%; --c: var(--c-oxepay); }
+.p-wowlog { bottom: 22%; left: 12%; --c: var(--c-wowlog); }
+.p-entret { bottom: 20%; right: 14%; --c: var(--c-entret); }
+.p-iai { top: 50%; right: 4%; transform: translateY(-50%); --c: var(--c-iai); }
+
+.eyebrow-top {
+  position: absolute; top: 64px; left: 50%; transform: translateX(-50%);
+  color: var(--malory-royal); z-index: 20;
+}
+.foot {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--malory-royal);
+  opacity: 0.8;
+  z-index: 20;
+}
+
+@media (max-width: 800px) {
+  .halo-wrap { width: 480px; height: 480px; }
+  .logo-pane { padding: 22px 28px }
+  .logo-pane img { width: 180px }
+  .pendant .gem { width: 40px; height: 40px; font-size: 16px }
+  .pendant .tag-pill { font-size: 12px; padding: 4px 9px }
+  .p-connect { top: 14%; left: 4% }
+  .p-oxepay { top: 12%; right: 4% }
+  .p-wowlog { bottom: 14%; left: 4% }
+  .p-entret { bottom: 12%; right: 4% }
+  .p-iai { top: 44%; right: 4%; transform: none }
+}
+</style>
+</head>
+<body>
+
+<nav class="version-nav dark-on-light"><a href="../index.html" style="color:#fff">×</a><a href="../v01/index.html">01</a><a href="../v02/index.html">02</a><a href="../v03/index.html">03</a><a href="../v04/index.html">04</a><a href="../v05/index.html">05</a><a href="../v06/index.html">06</a><a href="../v07/index.html">07</a><a href="../v08/index.html">08</a><a href="../v09/index.html">09</a><a href="../v10/index.html">10</a></nav>
+
+<section class="halo-page">
+  <div class="luminance"></div>
+
+  <div class="eyebrow-top eyebrow fade-in">— halo · cinco joias suspensas</div>
+
+  <div class="halo-wrap">
+    <div class="halo-ring"></div>
+    <div class="inner-ring"></div>
+  </div>
+
+  <div class="center">
+    <div class="logo-pane fade-in"><img src="../assets/logos/grupo-malory.png" alt="Grupo Malory"></div>
+    <div class="tag fade-in">A joia central</div>
+  </div>
+
+  <a href="https://maloryconnect.com" class="pendant p-connect" data-parallax="0.3">
+    <span class="chain"></span><span class="gem">C</span><span class="tag-pill">Malory Connect</span>
+  </a>
+  <a href="https://useoxepay.com.br" class="pendant p-oxepay" data-parallax="0.35">
+    <span class="chain"></span><span class="gem">O</span><span class="tag-pill">OxePay</span>
+  </a>
+  <a href="https://wowlognow.com" class="pendant p-wowlog" data-parallax="0.3">
+    <span class="chain"></span><span class="gem">W</span><span class="tag-pill">WowLog</span>
+  </a>
+  <a href="https://entretenimento.grupomalory.com" class="pendant p-entret" data-parallax="0.4">
+    <span class="chain"></span><span class="gem">E</span><span class="tag-pill">Malory Entretenimento</span>
+  </a>
+  <a href="https://iai.grupomalory.com" class="pendant p-iai" data-parallax="0.35">
+    <span class="chain"></span><span class="gem">I</span><span class="tag-pill">Iaí</span>
+  </a>
+
+  <div class="foot fade-in">refinamento · luz · permanência</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="../shared/init.js"></script>
+<script>
+gsap.from('.pendant', { opacity: 0, y: -30, duration: 1.6, stagger: 0.18, delay: 0.7, ease: 'expo.out' });
+</script>
+</body>
+</html>

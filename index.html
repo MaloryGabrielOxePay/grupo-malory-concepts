@@ -46,7 +46,7 @@ body { background: var(--canvas-deep); color: var(--paper); min-height: 100vh; }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--s-6);
 }
 .card {
@@ -59,19 +59,19 @@ body { background: var(--canvas-deep); color: var(--paper); min-height: 100vh; }
   border: 1px solid oklch(0.65 0.12 260 / 0.15);
   border-radius: 6px;
   text-decoration: none; color: inherit;
-  min-height: 200px;
+  min-height: 220px;
   transition: all 0.6s var(--ease-out-quart);
   overflow: hidden;
 }
 .card::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(135deg, oklch(0.45 0.22 262 / 0.0) 0%, oklch(0.45 0.22 262 / 0.15) 100%);
+  background: linear-gradient(135deg, oklch(0.45 0.22 262 / 0) 0%, oklch(0.45 0.22 262 / 0.18) 100%);
   opacity: 0;
   transition: opacity 0.5s;
   pointer-events: none;
 }
-.card:hover { transform: translateY(-4px); border-color: oklch(0.65 0.18 260 / 0.45); }
+.card:hover { transform: translateY(-4px); border-color: oklch(0.65 0.18 260 / 0.5); }
 .card:hover::before { opacity: 1 }
 .card .num {
   font-family: 'JetBrains Mono', monospace;
@@ -107,8 +107,6 @@ body { background: var(--canvas-deep); color: var(--paper); min-height: 100vh; }
   margin-top: var(--s-6);
   display: flex; align-items: center; gap: var(--s-2);
 }
-.card[data-status="pending"] { opacity: 0.45; pointer-events: none; }
-.card[data-status="pending"] .open::after { content: '· em construção'; opacity: 0.6 }
 
 .foot {
   margin-top: var(--s-16);
@@ -126,35 +124,63 @@ body { background: var(--canvas-deep); color: var(--paper); min-height: 100vh; }
   <div class="head">
     <div class="label fade-in">— grupo malory · concepts · 10 ways</div>
     <h1 class="title fade-in">Dez maneiras de conectar uma família de marcas</h1>
-    <p class="sub fade-in">Cada concept explora a relação Grupo Malory ⇄ sub-marcas (Malory Connect · OxePay · WowLog · Malory Entretenimento · Iaí) com uma estética distinta. Tudo com GSAP + ScrollTrigger + Lenis · movimento lento, cinematográfico.</p>
+    <p class="sub fade-in">Cada concept explora a relação Grupo Malory ⇄ sub-marcas (Malory Connect · OxePay · WowLog · Malory Entretenimento · Iaí) com uma estética distinta. Tudo em GSAP + ScrollTrigger + Lenis · movimento lento, cinematográfico. Clique pra abrir live.</p>
   </div>
 
   <div class="grid">
     <a class="card reveal" href="v01/index.html">
       <span class="num">01</span><span class="name">Constellation</span>
-      <p class="desc">Cosmos escuro · marcas como estrelas · linhas de constelação · parallax do mouse · pulso suave</p>
+      <p class="desc">Cosmos escuro · marcas como estrelas conectadas · parallax do mouse · pulso de luz</p>
       <span class="open">abrir →</span>
     </a>
     <a class="card reveal" href="v02/index.html">
       <span class="num">02</span><span class="name">Magnetic Field</span>
-      <p class="desc">Paper claro · campo magnético em curvas SVG · anel rotativo · nós das marcas com hover-pull</p>
+      <p class="desc">Paper claro · curvas magnéticas SVG · anel rotativo · nós com pull no hover</p>
       <span class="open">abrir →</span>
     </a>
     <a class="card reveal" href="v03/index.html">
       <span class="num">03</span><span class="name">Editorial Maison</span>
-      <p class="desc">Cream papel · Malory italic dominante · sumário em capítulos numerados · estética magazine</p>
+      <p class="desc">Cream papel · Malory italic dominante · sumário em capítulos numerados · magazine</p>
       <span class="open">abrir →</span>
     </a>
-    <a class="card reveal" data-status="pending"><span class="num">04</span><span class="name">Atomic Orbit</span><p class="desc">3D-feel · Malory nucleus · marcas como elétrons em ringues rotativos · perspective</p><span class="open">abrir →</span></a>
-    <a class="card reveal" data-status="pending"><span class="num">05</span><span class="name">Sound Wave Echo</span><p class="desc">Círculos concêntricos emanando do centro · ondas que ondulam ao hover · ritmo</p><span class="open">abrir →</span></a>
-    <a class="card reveal" data-status="pending"><span class="num">06</span><span class="name">Wireframe Architecture</span><p class="desc">Blueprint estilo arquitetônico · linhas técnicas conectando "edifícios" das marcas</p><span class="open">abrir →</span></a>
-    <a class="card reveal" data-status="pending"><span class="num">07</span><span class="name">Liquid Mercury</span><p class="desc">SVG fluido morphing · gotículas conectando marcas · distorção orgânica</p><span class="open">abrir →</span></a>
-    <a class="card reveal" data-status="pending"><span class="num">08</span><span class="name">Vintage Compass</span><p class="desc">Rosa dos ventos · Malory no centro · marcas como pontos cardeais · rotação lenta</p><span class="open">abrir →</span></a>
-    <a class="card reveal" data-status="pending"><span class="num">09</span><span class="name">Glass Halo</span><p class="desc">Halo de vidro · marcas suspensas como pingentes · refração · luz e leveza</p><span class="open">abrir →</span></a>
-    <a class="card reveal" data-status="pending"><span class="num">10</span><span class="name">Cinema Reel</span><p class="desc">Película de cinema · cenas verticais · transições cinemáticas entre marcas</p><span class="open">abrir →</span></a>
+    <a class="card reveal" href="v04/index.html">
+      <span class="num">04</span><span class="name">Atomic Orbit</span>
+      <p class="desc">3D perspective · 5 órbitas inclinadas · elétrons rotativos · profundidade real</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v05/index.html">
+      <span class="num">05</span><span class="name">Sound Wave Echo</span>
+      <p class="desc">Ondas concêntricas pulsando · ritmo de sinal · cinco marcadores em frequências distintas</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v06/index.html">
+      <span class="num">06</span><span class="name">Wireframe Architecture</span>
+      <p class="desc">Blueprint navy · grid técnico · linhas com distâncias em pixels · estética arquitetônica</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v07/index.html">
+      <span class="num">07</span><span class="name">Liquid Mercury</span>
+      <p class="desc">Light + orgânico · blobs em blur · gotas que pulsam · paths SVG fluidos</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v08/index.html">
+      <span class="num">08</span><span class="name">Vintage Compass</span>
+      <p class="desc">Rosa dos ventos dourada · rotação lenta · marcas em pontos cardeais · parchment grain</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v09/index.html">
+      <span class="num">09</span><span class="name">Glass Halo</span>
+      <p class="desc">Light premium · halo conic · joias suspensas com chain · refinamento puro</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v10/index.html">
+      <span class="num">10</span><span class="name">Cinema Reel</span>
+      <p class="desc">Filme em 5 atos · scroll vertical com ScrollTrigger · cada marca uma cena · parallax narrativo</p>
+      <span class="open">abrir →</span>
+    </a>
   </div>
 
-  <div class="foot fade-in">— construído em curso · 03 de 10 prontas · próximas no rolo</div>
+  <div class="foot fade-in">— 10 / 10 prontas · ao vivo via github pages · responda com o número da vencedora —</div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
