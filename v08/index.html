@@ -62,15 +62,25 @@ body { background: oklch(0.10 0.04 260); color: var(--paper); }
 }
 
 /* Brand at cardinal point */
+@keyframes cardinalFade { from { opacity: 0 } to { opacity: 1 } }
 .cardinal {
   position: absolute;
   z-index: 15;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   text-decoration: none; color: var(--paper);
   transition: all 0.6s var(--ease-out-quart);
-  opacity: 0;                /* hidden until GSAP fades in (prevents FOUC flash) */
+  opacity: 0;
+  animation: cardinalFade 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
 }
-.center-disc { opacity: 0; } /* same — revealed by gsap.to below */
+.cardinal.c-n  { animation-delay: 0.50s }
+.cardinal.c-ne { animation-delay: 0.63s }
+.cardinal.c-e  { animation-delay: 0.76s }
+.cardinal.c-w  { animation-delay: 0.89s }
+.cardinal.c-s  { animation-delay: 1.02s }
+.center-disc {
+  opacity: 0;
+  animation: cardinalFade 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
 .cardinal:hover { transform: var(--hover-tx, scale(1.06)); }
 .cardinal .deg {
   font-family: 'JetBrains Mono', monospace;
@@ -273,10 +283,8 @@ for (let i = 0; i < 72; i++) {
 }
 ticks.innerHTML = html;
 
-// gsap.to (not from) because CSS opacity:0 already locks elements hidden — prevents FOUC flash.
-// Skip scale animation on positioned elements to avoid overriding their CSS transform (translateX/Y).
-gsap.to('.center-disc', { opacity: 1, duration: 1.6, delay: 0.15, ease: 'expo.out' });
-gsap.to('.cardinal',    { opacity: 1, duration: 1.4, stagger: 0.13, delay: 0.45, ease: 'expo.out' });
+// .cardinal and .center-disc fades are handled by CSS animations (above), so they work even
+// if GSAP CDN fails to load. GSAP here only enhances with Lenis scroll + parallax via init.js.
 </script>
 </body>
 </html>

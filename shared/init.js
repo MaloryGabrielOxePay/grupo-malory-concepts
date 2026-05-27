@@ -56,38 +56,35 @@
       loop();
     }
 
-    // Hero reveal (fades + char-stagger). Selector .hero-reveal text gets split.
-    if (typeof gsap !== 'undefined') {
-      gsap.utils.toArray('.fade-in').forEach((el, i) => {
-        gsap.fromTo(el,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.4,
-            delay: 0.2 + i * 0.1,
-            ease: 'expo.out',
-          }
-        );
-      });
-
+    // .fade-in handled by CSS animation in base.css (no JS needed — survives GSAP CDN failure).
+    // .reveal uses GSAP ScrollTrigger when available, falls back to safety timeout below.
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       gsap.utils.toArray('.reveal').forEach((el) => {
-        gsap.fromTo(el,
-          { opacity: 0, y: 60 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.6,
-            ease: 'expo.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
+        gsap.to(el, {
+          opacity: 1,
+          duration: 1.6,
+          ease: 'expo.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+            onEnter: () => el.classList.add('shown'),
+          },
+        });
       });
     }
+
+    // SAFETY FALLBACK — if anything is still hidden after 4s (GSAP failed / ScrollTrigger didn't fire),
+    // force-show everything so the page is usable.
+    setTimeout(() => {
+      document.querySelectorAll('.reveal, .fade-in, .cardinal, .center-disc, [data-must-show]').forEach((el) => {
+        const op = parseFloat(getComputedStyle(el).opacity);
+        if (!op || op < 0.05) {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }
+      });
+    }, 4000);
 
     document.documentElement.classList.add('ready');
   }

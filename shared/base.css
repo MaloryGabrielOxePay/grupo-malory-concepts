@@ -103,6 +103,22 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .version-nav.dark-on-light { background: oklch(0.18 0.02 260 / 0.92); }
 
-/* Prevent FOUC — elements animated by GSAP start hidden via CSS,
-   then are revealed by gsap.fromTo / gsap.to in shared/init.js or per-version scripts. */
-.fade-in, .reveal { opacity: 0; }
+/* CSS-only fade-in (no JS dependency — works even if GSAP CDN fails) */
+@keyframes foucFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  opacity: 0;
+  animation: foucFade 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+.fade-in:nth-of-type(2) { animation-delay: 0.30s; }
+.fade-in:nth-of-type(3) { animation-delay: 0.40s; }
+.fade-in:nth-of-type(4) { animation-delay: 0.50s; }
+.fade-in:nth-of-type(5) { animation-delay: 0.60s; }
+.fade-in:nth-of-type(6) { animation-delay: 0.70s; }
+
+/* .reveal still uses GSAP ScrollTrigger; safety fallback in init.js
+   forces opacity:1 after 4s if anything is still hidden. */
+.reveal { opacity: 0; }
+.reveal.shown { opacity: 1; }
