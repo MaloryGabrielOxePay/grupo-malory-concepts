@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v07 · Liquid Mercury — Grupo Malory</title>
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+body { background: oklch(0.96 0.012 80); color: var(--ink); }
+.liquid {
+  position: relative; width: 100vw; height: 100vh; overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 40%, oklch(0.98 0.012 78) 0%, oklch(0.92 0.018 75) 60%, oklch(0.88 0.025 72) 100%);
+}
+.blobs {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.blob {
+  position: absolute;
+  filter: blur(60px);
+  opacity: 0.5;
+  border-radius: 50%;
+  animation: blobFloat 20s ease-in-out infinite;
+}
+.blob1 { width: 500px; height: 500px; background: oklch(0.72 0.16 260); top: -120px; left: -100px; animation-delay: 0s; }
+.blob2 { width: 600px; height: 600px; background: oklch(0.78 0.12 250); bottom: -180px; right: -120px; animation-delay: -7s; }
+.blob3 { width: 400px; height: 400px; background: oklch(0.85 0.10 258); top: 40%; left: 60%; animation-delay: -14s; }
+@keyframes blobFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(60px,-40px) scale(1.1); }
+  66% { transform: translate(-40px,60px) scale(0.95); }
+}
+
+.morph-svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.morph-svg path {
+  fill: oklch(0.45 0.22 262 / 0.08);
+  stroke: oklch(0.45 0.22 262 / 0.4);
+  stroke-width: 1.5;
+  transition: all 0.8s var(--ease-out-quart);
+}
+
+.center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 15;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.logo-orb {
+  position: relative;
+  padding: 32px 40px;
+  background: oklch(0.98 0.01 78 / 0.75);
+  border-radius: 50%;
+  border: 1px solid oklch(0.45 0.22 262 / 0.18);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow:
+    0 30px 80px -30px oklch(0.45 0.22 262 / 0.45),
+    inset 0 1px 0 oklch(1 0 0 / 0.9),
+    inset 0 -20px 40px oklch(0.45 0.22 262 / 0.06);
+}
+.logo-orb img { width: 280px; max-width: 55vw; display: block; }
+.center .label {
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: var(--t-lg);
+  color: var(--malory-deep);
+}
+
+.brand-drop {
+  position: absolute;
+  z-index: 12;
+  display: flex; flex-direction: column; align-items: center;
+  text-decoration: none; color: var(--ink);
+  transition: transform 0.7s var(--ease-out-quart);
+}
+.brand-drop:hover { transform: translate(var(--tx,0), var(--ty,0)) scale(1.08); }
+.brand-drop .droplet {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--c, var(--malory-light));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--paper);
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: 22px;
+  box-shadow:
+    0 20px 40px -16px var(--c, var(--malory-royal)),
+    inset 0 -8px 16px oklch(0 0 0 / 0.2),
+    inset 0 4px 8px oklch(1 0 0 / 0.3);
+  animation: droplet 4s ease-in-out infinite;
+}
+.brand-drop:nth-of-type(2n) .droplet { animation-delay: -1s; }
+.brand-drop:nth-of-type(3n) .droplet { animation-delay: -2s; }
+@keyframes droplet {
+  0%,100% { border-radius: 50% 50% 50% 50%; }
+  33% { border-radius: 60% 40% 50% 50%; }
+  66% { border-radius: 40% 60% 60% 40%; }
+}
+.brand-drop .pill {
+  margin-top: 10px;
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--malory-deep);
+  background: oklch(0.98 0.01 78 / 0.85);
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid oklch(0.45 0.22 262 / 0.15);
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.brand-drop .url {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.brand-drop:hover .url { opacity: 1; }
+
+.d-connect { top: 18%; left: 16%; --c: var(--c-connect); }
+.d-oxepay { top: 18%; right: 14%; --c: var(--c-oxepay); }
+.d-wowlog { bottom: 18%; left: 12%; --c: var(--c-wowlog); }
+.d-entret { bottom: 18%; right: 14%; --c: var(--c-entret); }
+.d-iai { top: 50%; right: 4%; transform: translateY(-50%); --c: var(--c-iai); }
+
+.eyebrow-top {
+  position: absolute; top: 64px; left: 50%; transform: translateX(-50%);
+  color: var(--malory-royal); z-index: 20;
+}
+.foot {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.4em;
+  color: var(--malory-royal);
+  text-transform: uppercase;
+  z-index: 20;
+  opacity: 0.7;
+}
+
+@media (max-width: 800px) {
+  .logo-orb img { width: 200px; }
+  .brand-drop .droplet { width: 44px; height: 44px; font-size: 18px; }
+  .brand-drop .pill { font-size: 13px; padding: 3px 9px; }
+  .d-connect { top: 12%; left: 4% } .d-oxepay { top: 10%; right: 4% }
+  .d-wowlog { bottom: 12%; left: 4% } .d-entret { bottom: 10%; right: 4% }
+  .d-iai { top: 44%; right: 4%; transform: none }
+}
+</style>
+</head>
+<body>
+
+<nav class="version-nav dark-on-light"><a href="../index.html" style="color:#fff">×</a><a href="../v01/index.html">01</a><a href="../v02/index.html">02</a><a href="../v03/index.html">03</a><a href="../v04/index.html">04</a><a href="../v05/index.html">05</a><a href="../v06/index.html">06</a><a href="../v07/index.html">07</a><a href="../v08/index.html">08</a><a href="../v09/index.html">09</a><a href="../v10/index.html">10</a></nav>
+
+<section class="liquid">
+  <div class="blobs">
+    <div class="blob blob1" data-parallax="0.3"></div>
+    <div class="blob blob2" data-parallax="0.4"></div>
+    <div class="blob blob3" data-parallax="0.5"></div>
+  </div>
+
+  <svg class="morph-svg" id="morph" preserveAspectRatio="none"></svg>
+
+  <div class="eyebrow-top eyebrow fade-in">— em fluxo · cinco gotas de uma fonte</div>
+
+  <div class="center">
+    <div class="logo-orb fade-in"><img src="../assets/logos/grupo-malory.png" alt="Grupo Malory"></div>
+    <div class="label fade-in">A fonte</div>
+  </div>
+
+  <a href="https://maloryconnect.com" class="brand-drop d-connect" data-parallax="0.4">
+    <span class="droplet">C</span><span class="pill">Malory Connect</span><span class="url">maloryconnect.com</span>
+  </a>
+  <a href="https://useoxepay.com.br" class="brand-drop d-oxepay" data-parallax="0.5">
+    <span class="droplet">O</span><span class="pill">OxePay</span><span class="url">useoxepay.com.br</span>
+  </a>
+  <a href="https://wowlognow.com" class="brand-drop d-wowlog" data-parallax="0.45">
+    <span class="droplet">W</span><span class="pill">WowLog</span><span class="url">wowlognow.com</span>
+  </a>
+  <a href="https://entretenimento.grupomalory.com" class="brand-drop d-entret" data-parallax="0.4">
+    <span class="droplet">E</span><span class="pill">Malory Entretenimento</span><span class="url">entretenimento.grupomalory.com</span>
+  </a>
+  <a href="https://iai.grupomalory.com" class="brand-drop d-iai" data-parallax="0.5">
+    <span class="droplet">I</span><span class="pill">Iaí</span><span class="url">iai.grupomalory.com</span>
+  </a>
+
+  <div class="foot fade-in">flui · respira · conecta</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="../shared/init.js"></script>
+<script>
+// Draw organic curved fills from center to each drop
+function drawMorph() {
+  const svg = document.getElementById('morph');
+  const w = window.innerWidth, h = window.innerHeight;
+  svg.setAttribute('width', w); svg.setAttribute('height', h);
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  const cx = w/2, cy = h/2;
+  const drops = document.querySelectorAll('.brand-drop');
+  let html = '';
+  drops.forEach((d) => {
+    const r = d.getBoundingClientRect();
+    const x = r.left + r.width/2;
+    const y = r.top + 28;
+    const dx = x - cx, dy = y - cy;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const angle = Math.atan2(dy, dx);
+    // perpendicular for thickness
+    const px = Math.cos(angle + Math.PI/2);
+    const py = Math.sin(angle + Math.PI/2);
+    const tStart = 38, tEnd = 28; // taper
+    const ax = cx + px*tStart, ay = cy + py*tStart;
+    const bx = cx - px*tStart, by = cy - py*tStart;
+    const cx2 = x + px*tEnd, cy2 = y + py*tEnd;
+    const dx2 = x - px*tEnd, dy2 = y - py*tEnd;
+    const mx1 = cx + dx*0.45 + py*40, my1 = cy + dy*0.45 - px*40;
+    const mx2 = cx + dx*0.55 - py*40, my2 = cy + dy*0.55 + px*40;
+    html += `<path d="M ${ax} ${ay} Q ${mx1} ${my1} ${cx2} ${cy2} L ${dx2} ${dy2} Q ${mx2} ${my2} ${bx} ${by} Z"/>`;
+  });
+  svg.innerHTML = html;
+}
+drawMorph();
+window.addEventListener('resize', drawMorph);
+window.addEventListener('load', drawMorph);
+setTimeout(drawMorph, 200);
+
+gsap.from('.brand-drop', { opacity: 0, scale: 0.3, duration: 1.6, stagger: 0.15, delay: 0.8, ease: 'expo.out' });
+</script>
+</body>
+</html>
