@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v01 · Constellation — Grupo Malory</title>
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+body { background: var(--canvas-deep); color: var(--paper); }
+.cosmos {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 30% 20%, oklch(0.22 0.12 262 / 0.6), transparent 50%),
+    radial-gradient(ellipse at 75% 80%, oklch(0.18 0.10 250 / 0.5), transparent 55%),
+    var(--canvas-deep);
+}
+.stars {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent),
+    radial-gradient(1.2px 1.2px at 28% 62%, #fff 50%, transparent),
+    radial-gradient(0.8px 0.8px at 45% 11%, oklch(0.85 0.06 260) 50%, transparent),
+    radial-gradient(1.4px 1.4px at 67% 38%, #fff 50%, transparent),
+    radial-gradient(0.6px 0.6px at 82% 70%, #fff 50%, transparent),
+    radial-gradient(1px 1px at 91% 22%, oklch(0.78 0.08 250) 50%, transparent),
+    radial-gradient(0.8px 0.8px at 18% 88%, #fff 50%, transparent),
+    radial-gradient(1.5px 1.5px at 52% 78%, oklch(0.9 0.05 258) 50%, transparent),
+    radial-gradient(0.7px 0.7px at 7% 45%, #fff 50%, transparent),
+    radial-gradient(1px 1px at 38% 30%, #fff 50%, transparent),
+    radial-gradient(1.1px 1.1px at 73% 55%, #fff 50%, transparent),
+    radial-gradient(0.9px 0.9px at 96% 88%, #fff 50%, transparent);
+  background-size: 100% 100%;
+  opacity: 0.7;
+  animation: starsTwinkle 8s ease-in-out infinite;
+}
+@keyframes starsTwinkle { 0%,100% { opacity: 0.5 } 50% { opacity: 0.9 } }
+
+.connections { position: absolute; inset: 0; pointer-events: none; }
+.connections line { stroke: oklch(0.65 0.18 260 / 0.18); stroke-width: 1; stroke-dasharray: 4 6; }
+
+.eyebrow-top {
+  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+  color: oklch(0.65 0.08 258); z-index: 10;
+}
+
+.center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  z-index: 12;
+}
+.center-logo-wrap {
+  position: relative;
+  padding: 36px 48px;
+  background: oklch(0.12 0.02 260 / 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid oklch(0.65 0.12 260 / 0.25);
+  border-radius: 4px;
+  box-shadow:
+    0 0 60px oklch(0.45 0.22 262 / 0.4),
+    0 0 120px oklch(0.45 0.22 262 / 0.2),
+    inset 0 1px 0 oklch(1 0 0 / 0.06);
+}
+.center-logo-wrap::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, transparent 40%, oklch(0.7 0.18 260 / 0.6) 50%, transparent 60%);
+  background-size: 300% 300%;
+  animation: shineSweep 6s ease-in-out infinite;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+}
+@keyframes shineSweep { 0%,100% { background-position: 0% 0% } 50% { background-position: 100% 100% } }
+.center-logo { width: 340px; max-width: 80vw; height: auto; filter: drop-shadow(0 4px 24px oklch(0.45 0.22 262 / 0.5)); }
+.tagline {
+  font-family: 'Italiana', serif;
+  font-style: normal;
+  font-size: var(--t-lg);
+  color: oklch(0.85 0.06 258);
+  letter-spacing: 0.04em;
+  margin-top: 8px;
+}
+
+.brand-star {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  text-decoration: none; color: var(--paper);
+  z-index: 11;
+  cursor: pointer;
+  transition: transform 0.6s var(--ease-out-quart);
+}
+.brand-star:hover { transform: translate(var(--tx,0), var(--ty,0)) scale(1.08); }
+.brand-star .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--c, var(--malory-light));
+  box-shadow: 0 0 12px var(--c, var(--malory-light)), 0 0 24px var(--c, var(--malory-light));
+  animation: dotPulse 3s ease-in-out infinite;
+}
+.brand-star:nth-of-type(odd) .dot { animation-delay: 1s }
+@keyframes dotPulse { 0%,100% { opacity: 0.7; transform: scale(1) } 50% { opacity: 1; transform: scale(1.3) } }
+.brand-star .label {
+  font-family: 'Italiana', serif;
+  font-style: normal;
+  font-size: clamp(14px, 1.2vw, 18px);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  background: oklch(0.1 0.02 260 / 0.6);
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid oklch(0.65 0.12 260 / 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.brand-star .domain {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: oklch(0.65 0.08 258);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-quart);
+}
+.brand-star:hover .domain { opacity: 1 }
+
+/* Position each brand-star — calculated for visual balance */
+.b-connect { top: 22%; left: 18%; --c: var(--c-connect); }
+.b-connect:hover { --tx: -4px; --ty: -4px }
+.b-oxepay { top: 18%; right: 16%; --c: var(--c-oxepay); }
+.b-wowlog { bottom: 22%; left: 13%; --c: var(--c-wowlog); }
+.b-entret { bottom: 18%; right: 18%; --c: var(--c-entret); }
+.b-iai { top: 50%; right: 6%; transform: translateY(-50%); --c: var(--c-iai); }
+
+.foot {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  color: oklch(0.55 0.06 258);
+  z-index: 10;
+}
+
+@media (max-width: 800px) {
+  .center-logo { width: 240px; }
+  .brand-star .label { font-size: 12px; padding: 3px 8px; }
+  .b-connect { top: 14%; left: 8% }
+  .b-oxepay { top: 12%; right: 8% }
+  .b-wowlog { bottom: 16%; left: 6% }
+  .b-entret { bottom: 12%; right: 8% }
+  .b-iai { top: auto; bottom: 38%; right: 4%; transform: none }
+}
+</style>
+</head>
+<body>
+
+<nav class="version-nav"><a href="../index.html">×</a><a href="../v01/index.html">01</a><a href="../v02/index.html">02</a><a href="../v03/index.html">03</a><a href="../v04/index.html">04</a><a href="../v05/index.html">05</a><a href="../v06/index.html">06</a><a href="../v07/index.html">07</a><a href="../v08/index.html">08</a><a href="../v09/index.html">09</a><a href="../v10/index.html">10</a></nav>
+
+<section class="cosmos">
+  <div class="stars" data-parallax="0.5"></div>
+
+  <svg class="connections" id="connections" preserveAspectRatio="none"></svg>
+
+  <div class="eyebrow-top eyebrow fade-in">— uma constelação de marcas</div>
+
+  <div class="center" data-parallax="0.2">
+    <div class="center-logo-wrap fade-in">
+      <img class="center-logo" src="../assets/logos/grupo-malory.png" alt="Grupo Malory" id="centerLogo">
+    </div>
+    <div class="tagline fade-in">A casa onde cada negócio brilha</div>
+  </div>
+
+  <a href="https://maloryconnect.com" class="brand-star b-connect" data-parallax="0.8">
+    <span class="dot"></span><span class="label">Malory Connect</span><span class="domain">maloryconnect.com</span>
+  </a>
+  <a href="https://useoxepay.com.br" class="brand-star b-oxepay" data-parallax="0.7">
+    <span class="dot"></span><span class="label">OxePay</span><span class="domain">useoxepay.com.br</span>
+  </a>
+  <a href="https://wowlognow.com" class="brand-star b-wowlog" data-parallax="0.9">
+    <span class="dot"></span><span class="label">WowLog</span><span class="domain">wowlognow.com</span>
+  </a>
+  <a href="https://entretenimento.grupomalory.com" class="brand-star b-entret" data-parallax="0.6">
+    <span class="dot"></span><span class="label">Malory Entretenimento</span><span class="domain">entretenimento.grupomalory.com</span>
+  </a>
+  <a href="https://iai.grupomalory.com" class="brand-star b-iai" data-parallax="0.75">
+    <span class="dot"></span><span class="label">Iaí</span><span class="domain">iai.grupomalory.com</span>
+  </a>
+
+  <div class="foot eyebrow fade-in">selecione uma estrela</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="../shared/init.js"></script>
+<script>
+// Draw connecting lines from center to each brand-star
+function drawConnections() {
+  const svg = document.getElementById('connections');
+  const w = window.innerWidth, h = window.innerHeight;
+  svg.setAttribute('width', w); svg.setAttribute('height', h);
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  const cx = w/2, cy = h/2;
+  const stars = document.querySelectorAll('.brand-star');
+  let html = '';
+  stars.forEach((s) => {
+    const r = s.getBoundingClientRect();
+    const x = r.left + r.width/2;
+    const y = r.top + r.height/2;
+    html += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
+  });
+  svg.innerHTML = html;
+}
+drawConnections();
+window.addEventListener('resize', drawConnections);
+window.addEventListener('load', drawConnections);
+setTimeout(drawConnections, 200);
+
+// Stagger brand-star entrance
+gsap.from('.brand-star', {
+  opacity: 0,
+  scale: 0.6,
+  duration: 1.4,
+  stagger: 0.15,
+  delay: 0.6,
+  ease: 'expo.out',
+});
+</script>
+</body>
+</html>

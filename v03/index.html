@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v03 · Editorial Maison — Grupo Malory</title>
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+body { background: var(--paper-warm); color: var(--ink); }
+.page {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 58% 42%;
+  background:
+    linear-gradient(180deg, oklch(0.96 0.012 80) 0%, oklch(0.93 0.015 75) 100%);
+}
+.page::before {
+  content: 'M';
+  position: absolute;
+  top: -120px; right: -100px;
+  font-family: 'Italiana', serif;
+  font-size: 560px;
+  line-height: 0.8;
+  color: oklch(0.45 0.22 262 / 0.04);
+  pointer-events: none;
+  z-index: 0;
+}
+.left {
+  padding: clamp(40px, 6vw, 120px) clamp(32px, 5vw, 80px);
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; z-index: 5;
+}
+.tl-meta {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--malory-royal);
+  text-transform: uppercase;
+}
+.title-block {
+  display: flex; flex-direction: column; gap: var(--s-6);
+}
+.eyebrow-grupo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.55em;
+  color: var(--malory-royal);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.massive {
+  font-family: 'Italiana', serif;
+  font-size: var(--t-4xl);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: var(--malory-deep);
+  font-style: italic;
+}
+.lede {
+  font-family: 'Spectral', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: var(--t-lg);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 50ch;
+  border-top: 1px solid var(--malory-royal);
+  padding-top: var(--s-6);
+  margin-top: var(--s-6);
+}
+.logo-stamp {
+  display: flex; align-items: center; gap: var(--s-4);
+}
+.logo-stamp img { width: 220px }
+
+.right {
+  padding: clamp(40px, 6vw, 120px) clamp(32px, 5vw, 80px) clamp(40px, 6vw, 120px) clamp(20px, 3vw, 48px);
+  border-left: 1px solid oklch(0.45 0.22 262 / 0.18);
+  background:
+    linear-gradient(180deg, oklch(0.97 0.012 78) 0%, oklch(0.94 0.018 75) 100%);
+  display: flex; flex-direction: column; justify-content: center; gap: var(--s-12);
+  position: relative; z-index: 5;
+}
+.summary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--malory-royal);
+  text-transform: uppercase;
+  margin-bottom: var(--s-2);
+}
+.entries { display: flex; flex-direction: column; }
+.entry {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: baseline;
+  padding: var(--s-6) 0;
+  border-bottom: 1px solid oklch(0.45 0.22 262 / 0.14);
+  text-decoration: none; color: inherit;
+  transition: all 0.5s var(--ease-out-quart);
+  position: relative;
+}
+.entry::after {
+  content: ''; position: absolute; left: 0; bottom: -1px;
+  width: 0; height: 1px;
+  background: var(--malory-deep);
+  transition: width 0.7s var(--ease-out-quart);
+}
+.entry:hover::after { width: 100% }
+.entry:hover { padding-left: var(--s-3) }
+.entry .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--malory-royal);
+  letter-spacing: 0.2em;
+}
+.entry .name {
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: clamp(22px, 2.1vw, 32px);
+  color: var(--malory-deep);
+  line-height: 1;
+}
+.entry .arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--malory-royal);
+  transition: transform 0.5s var(--ease-out-quart);
+}
+.entry:hover .arrow { transform: translateX(6px) }
+.entry .domain {
+  grid-column: 2;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  margin-top: var(--s-1);
+  text-transform: lowercase;
+}
+
+@media (max-width: 900px) {
+  .page { grid-template-columns: 1fr; }
+  .page::before { font-size: 320px; top: -80px; }
+  .right { border-left: none; border-top: 1px solid oklch(0.45 0.22 262 / 0.18); }
+}
+</style>
+</head>
+<body>
+
+<nav class="version-nav dark-on-light"><a href="../index.html" style="color:#fff">×</a><a href="../v01/index.html">01</a><a href="../v02/index.html">02</a><a href="../v03/index.html">03</a><a href="../v04/index.html">04</a><a href="../v05/index.html">05</a><a href="../v06/index.html">06</a><a href="../v07/index.html">07</a><a href="../v08/index.html">08</a><a href="../v09/index.html">09</a><a href="../v10/index.html">10</a></nav>
+
+<section class="page">
+  <div class="left">
+    <div class="tl-meta fade-in"><span>est. MMXXVI</span><span>vol. I · ed. I</span></div>
+    <div class="title-block">
+      <div class="eyebrow-grupo fade-in">G·R·U·P·O</div>
+      <h1 class="massive fade-in">Malory</h1>
+      <p class="lede fade-in">Uma família de negócios contemporâneos — conexão, pagamentos, logística white-glove, entretenimento e inteligência artificial. Um portfólio. Uma assinatura.</p>
+    </div>
+    <div class="logo-stamp tl-meta fade-in"><img src="../assets/logos/grupo-malory.png" alt=""><span>portfolio · 2026</span></div>
+  </div>
+  <div class="right">
+    <div class="summary fade-in">— sumário · cinco capítulos</div>
+    <div class="entries">
+      <a class="entry reveal" href="https://maloryconnect.com">
+        <span class="num">01</span><span class="name">Malory Connect</span><span class="arrow">→</span>
+        <span class="domain">maloryconnect.com</span>
+      </a>
+      <a class="entry reveal" href="https://useoxepay.com.br">
+        <span class="num">02</span><span class="name">OxePay</span><span class="arrow">→</span>
+        <span class="domain">useoxepay.com.br</span>
+      </a>
+      <a class="entry reveal" href="https://wowlognow.com">
+        <span class="num">03</span><span class="name">WowLog</span><span class="arrow">→</span>
+        <span class="domain">wowlognow.com</span>
+      </a>
+      <a class="entry reveal" href="https://entretenimento.grupomalory.com">
+        <span class="num">04</span><span class="name">Malory Entretenimento</span><span class="arrow">→</span>
+        <span class="domain">entretenimento.grupomalory.com</span>
+      </a>
+      <a class="entry reveal" href="https://iai.grupomalory.com">
+        <span class="num">05</span><span class="name">Iaí</span><span class="arrow">→</span>
+        <span class="domain">iai.grupomalory.com</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="../shared/init.js"></script>
+<script>
+gsap.from('.entry', {
+  opacity: 0, x: 30,
+  duration: 1.2, stagger: 0.12, delay: 0.5, ease: 'expo.out',
+});
+</script>
+</body>
+</html>

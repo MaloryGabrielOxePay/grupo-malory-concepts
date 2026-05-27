@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grupo Malory · 10 Site Concepts</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+body { background: var(--canvas-deep); color: var(--paper); min-height: 100vh; }
+.master {
+  min-height: 100vh;
+  padding: clamp(40px, 6vw, 96px) clamp(24px, 4vw, 64px);
+  background:
+    radial-gradient(ellipse at 30% 10%, oklch(0.22 0.12 262 / 0.4), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, oklch(0.18 0.10 250 / 0.35), transparent 55%),
+    var(--canvas-deep);
+}
+.head {
+  display: flex; flex-direction: column; gap: var(--s-4);
+  margin-bottom: var(--s-16);
+}
+.head .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.5em;
+  color: oklch(0.65 0.12 260);
+  text-transform: uppercase;
+}
+.head .title {
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: var(--t-3xl);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+}
+.head .sub {
+  font-family: 'Spectral', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: var(--t-lg);
+  color: oklch(0.7 0.04 258);
+  max-width: 60ch;
+  margin-top: var(--s-2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--s-6);
+}
+.card {
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: var(--s-8);
+  background: oklch(0.16 0.025 260 / 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.65 0.12 260 / 0.15);
+  border-radius: 6px;
+  text-decoration: none; color: inherit;
+  min-height: 200px;
+  transition: all 0.6s var(--ease-out-quart);
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, oklch(0.45 0.22 262 / 0.0) 0%, oklch(0.45 0.22 262 / 0.15) 100%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+.card:hover { transform: translateY(-4px); border-color: oklch(0.65 0.18 260 / 0.45); }
+.card:hover::before { opacity: 1 }
+.card .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: oklch(0.65 0.12 260);
+  text-transform: uppercase;
+}
+.card .name {
+  font-family: 'Italiana', serif;
+  font-style: italic;
+  font-size: var(--t-xl);
+  margin-top: var(--s-3);
+  line-height: 1.05;
+  color: var(--paper);
+}
+.card .desc {
+  font-family: 'Spectral', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: var(--t-sm);
+  color: oklch(0.65 0.04 258);
+  margin-top: var(--s-4);
+  flex-grow: 1;
+  line-height: 1.5;
+}
+.card .open {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: oklch(0.65 0.18 260);
+  margin-top: var(--s-6);
+  display: flex; align-items: center; gap: var(--s-2);
+}
+.card[data-status="pending"] { opacity: 0.45; pointer-events: none; }
+.card[data-status="pending"] .open::after { content: '· em construção'; opacity: 0.6 }
+
+.foot {
+  margin-top: var(--s-16);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: oklch(0.5 0.04 258);
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<section class="master">
+  <div class="head">
+    <div class="label fade-in">— grupo malory · concepts · 10 ways</div>
+    <h1 class="title fade-in">Dez maneiras de conectar uma família de marcas</h1>
+    <p class="sub fade-in">Cada concept explora a relação Grupo Malory ⇄ sub-marcas (Malory Connect · OxePay · WowLog · Malory Entretenimento · Iaí) com uma estética distinta. Tudo com GSAP + ScrollTrigger + Lenis · movimento lento, cinematográfico.</p>
+  </div>
+
+  <div class="grid">
+    <a class="card reveal" href="v01/index.html">
+      <span class="num">01</span><span class="name">Constellation</span>
+      <p class="desc">Cosmos escuro · marcas como estrelas · linhas de constelação · parallax do mouse · pulso suave</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v02/index.html">
+      <span class="num">02</span><span class="name">Magnetic Field</span>
+      <p class="desc">Paper claro · campo magnético em curvas SVG · anel rotativo · nós das marcas com hover-pull</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" href="v03/index.html">
+      <span class="num">03</span><span class="name">Editorial Maison</span>
+      <p class="desc">Cream papel · Malory italic dominante · sumário em capítulos numerados · estética magazine</p>
+      <span class="open">abrir →</span>
+    </a>
+    <a class="card reveal" data-status="pending"><span class="num">04</span><span class="name">Atomic Orbit</span><p class="desc">3D-feel · Malory nucleus · marcas como elétrons em ringues rotativos · perspective</p><span class="open">abrir →</span></a>
+    <a class="card reveal" data-status="pending"><span class="num">05</span><span class="name">Sound Wave Echo</span><p class="desc">Círculos concêntricos emanando do centro · ondas que ondulam ao hover · ritmo</p><span class="open">abrir →</span></a>
+    <a class="card reveal" data-status="pending"><span class="num">06</span><span class="name">Wireframe Architecture</span><p class="desc">Blueprint estilo arquitetônico · linhas técnicas conectando "edifícios" das marcas</p><span class="open">abrir →</span></a>
+    <a class="card reveal" data-status="pending"><span class="num">07</span><span class="name">Liquid Mercury</span><p class="desc">SVG fluido morphing · gotículas conectando marcas · distorção orgânica</p><span class="open">abrir →</span></a>
+    <a class="card reveal" data-status="pending"><span class="num">08</span><span class="name">Vintage Compass</span><p class="desc">Rosa dos ventos · Malory no centro · marcas como pontos cardeais · rotação lenta</p><span class="open">abrir →</span></a>
+    <a class="card reveal" data-status="pending"><span class="num">09</span><span class="name">Glass Halo</span><p class="desc">Halo de vidro · marcas suspensas como pingentes · refração · luz e leveza</p><span class="open">abrir →</span></a>
+    <a class="card reveal" data-status="pending"><span class="num">10</span><span class="name">Cinema Reel</span><p class="desc">Película de cinema · cenas verticais · transições cinemáticas entre marcas</p><span class="open">abrir →</span></a>
+  </div>
+
+  <div class="foot fade-in">— construído em curso · 03 de 10 prontas · próximas no rolo</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="shared/init.js"></script>
+</body>
+</html>
