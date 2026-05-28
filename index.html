@@ -2,190 +2,265 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grupo Malory · 10 Site Concepts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grupo Malory</title>
 <link rel="stylesheet" href="shared/base.css">
 <style>
-body { background: var(--canvas-deep); color: var(--paper); min-height: 100vh; }
-.master {
-  min-height: 100vh;
-  padding: clamp(40px, 6vw, 96px) clamp(24px, 4vw, 64px);
-  background:
-    radial-gradient(ellipse at 30% 10%, oklch(0.22 0.12 262 / 0.4), transparent 50%),
-    radial-gradient(ellipse at 80% 90%, oklch(0.18 0.10 250 / 0.35), transparent 55%),
-    var(--canvas-deep);
+:root{
+  --size: clamp(290px, min(86vw, 78vh), 600px);
+  --R: calc(var(--size) * 0.365);
+  --disc: calc(var(--size) * 0.30);
+  --chip: calc(var(--size) * 0.20);
+  --contact: calc(var(--size) * 0.135);
+  --ink: var(--canvas-deep);
+  --line: rgba(232,232,236,.16);
+  --line-dim: rgba(232,232,236,.07);
+  --tick: rgba(232,232,236,.22);
+  --needle-n: #f2f2f4;
+  --needle-s: rgba(242,242,244,.35);
+  --hub: #f2f2f4;
+  --icon: rgba(236,236,240,.85);
+  --beacon: rgba(232,232,236,.42);
+  --hud-name: #f4f4f6;
+  --hud-deg: rgba(232,232,236,.5);
+  --hint: rgba(232,232,236,.55);
 }
-.head {
-  display: flex; flex-direction: column; gap: var(--s-4);
-  margin-bottom: var(--s-16);
-}
-.head .label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.5em;
-  color: oklch(0.65 0.12 260);
-  text-transform: uppercase;
-}
-.head .title {
-  font-family: 'Italiana', serif;
-  font-style: italic;
-  font-size: var(--t-3xl);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--paper);
-}
-.head .sub {
-  font-family: 'Spectral', serif;
-  font-style: italic;
-  font-weight: 300;
-  font-size: var(--t-lg);
-  color: oklch(0.7 0.04 258);
-  max-width: 60ch;
-  margin-top: var(--s-2);
-}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--s-6);
+.compass-page{
+  position:relative; width:100%;
+  min-height:100svh; height:100svh; height:100dvh;
+  display:grid; place-items:center; overflow:hidden; background:var(--ink);
 }
-.card {
-  position: relative;
-  display: flex; flex-direction: column;
-  padding: var(--s-8);
-  background: oklch(0.16 0.025 260 / 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.65 0.12 260 / 0.15);
-  border-radius: 6px;
-  text-decoration: none; color: inherit;
-  min-height: 220px;
-  transition: all 0.6s var(--ease-out-quart);
-  overflow: hidden;
-}
-.card::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, oklch(0.45 0.22 262 / 0) 0%, oklch(0.45 0.22 262 / 0.18) 100%);
-  opacity: 0;
-  transition: opacity 0.5s;
-  pointer-events: none;
-}
-.card:hover { transform: translateY(-4px); border-color: oklch(0.65 0.18 260 / 0.5); }
-.card:hover::before { opacity: 1 }
-.card .num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.4em;
-  color: oklch(0.65 0.12 260);
-  text-transform: uppercase;
-}
-.card .name {
-  font-family: 'Italiana', serif;
-  font-style: italic;
-  font-size: var(--t-xl);
-  margin-top: var(--s-3);
-  line-height: 1.05;
-  color: var(--paper);
-}
-.card .desc {
-  font-family: 'Spectral', serif;
-  font-style: italic;
-  font-weight: 300;
-  font-size: var(--t-sm);
-  color: oklch(0.65 0.04 258);
-  margin-top: var(--s-4);
-  flex-grow: 1;
-  line-height: 1.5;
-}
-.card .open {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: oklch(0.65 0.18 260);
-  margin-top: var(--s-6);
-  display: flex; align-items: center; gap: var(--s-2);
-}
+.atmos{position:absolute; inset:0; pointer-events:none}
+.grain{ position:absolute; inset:0; opacity:.22; mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.9 0 0 0 0 0.95 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-.foot {
-  margin-top: var(--s-16);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  color: oklch(0.5 0.04 258);
-  text-transform: uppercase;
+.compass{ position:relative; width:var(--size); height:var(--size) }
+.layer{ position:absolute; inset:0 }
+.rose svg,.needle svg{ width:100%; height:100% }
+.rose .ring{ fill:none; stroke:var(--line) }
+.rose .ring.dim{ stroke:var(--line-dim) }
+.rose .tick{ stroke:var(--tick) }
+
+/* AGULHA — ACIMA das logos (z 25), abaixo do mostrador central (z 30) */
+.needle{ transform-origin:50% 50%; will-change:transform; z-index:25 }
+.needle .line{ stroke:var(--needle-n); fill:none }
+.needle .line-tail{ stroke:var(--needle-s); fill:none }
+.needle .line-tip{ fill:var(--needle-n) }
+.needle .dot{ fill:var(--hub) }
+
+.dial{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:var(--disc); height:var(--disc); border-radius:50%; display:grid; place-items:center; z-index:30; }
+.dial .face{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(232,232,236,.18); }
+.dial .logo{ position:relative; z-index:2; width:72% }
+.dial .logo img{ width:100%; display:block }
+
+.hud{ position:absolute; left:50%; transform:translateX(-50%);
+  bottom:calc(50% - var(--disc)/2 - 46px); text-align:center; z-index:35; pointer-events:none;
+  opacity:0; transition:opacity .35s ease; max-width:86vw; }
+.hud.show{ opacity:1 }
+.hud .h-name{ font-family:'Italiana','Spectral',serif; font-style:italic; font-size:26px; color:var(--hud-name); line-height:1 }
+.hud .h-deg{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em; color:var(--hud-deg); margin-top:6px }
+
+.brand{ position:absolute; top:50%; left:50%; width:var(--chip); display:grid; place-items:center;
+  text-decoration:none; cursor:pointer; z-index:20; -webkit-tap-highlight-color:transparent;
+  transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1 * var(--R))) rotate(calc(-1 * var(--a)));
+  opacity:0; }
+.brand .chip{ width:100%; aspect-ratio:1/1; border-radius:50%; position:relative; display:grid; place-items:center;
+  padding:calc(var(--size)*.02); border:1px solid transparent;
+  transition:transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease; }
+.brand .chip img{ max-width:100%; max-height:100%; display:block }
+.brand:hover .chip{ transform:scale(1.05) }
+.brand.active .chip{ transform:scale(1.12); border-color:rgba(232,232,236,.5) }
+
+.contact{ width:var(--contact) }
+.contact .chip{ color:var(--icon); border:1px solid rgba(232,232,236,.2) }
+.contact .chip svg{ width:56%; height:56% }
+
+@keyframes heroPulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.055)} }
+@keyframes beacon{ 0%{transform:translate(-50%,-50%) scale(.82);opacity:.7} 70%{opacity:0} 100%{transform:translate(-50%,-50%) scale(1.45);opacity:0} }
+.brand.hero .chip{ animation:heroPulse 2.6s ease-in-out infinite }
+.brand.hero:hover .chip,.brand.hero.active .chip{ animation:none; transform:scale(1.12) }
+.brand.hero::after{ content:''; position:absolute; left:50%; top:50%;
+  width:calc(var(--chip)*0.98); height:calc(var(--chip)*0.98); border-radius:50%;
+  border:1.5px solid var(--beacon); transform:translate(-50%,-50%) scale(.82);
+  animation:beacon 2.6s ease-out infinite; pointer-events:none; z-index:-1; }
+
+.skip{ position:absolute; top:max(16px, env(safe-area-inset-top)); right:18px; z-index:120;
+  font:400 11px/1 'JetBrains Mono',monospace; letter-spacing:.1em; color:rgba(232,232,236,.5);
+  background:transparent; cursor:pointer; border:1px solid rgba(232,232,236,.2); border-radius:999px;
+  padding:8px 14px; opacity:0; transition:opacity .3s ease; }
+.skip.show{ opacity:1 } .skip:hover{ color:#fff }
+
+.hint{ position:absolute; left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); transform:translateX(-50%);
+  z-index:40; text-align:center; white-space:normal; max-width:86vw;
+  font-family:'Italiana','Spectral',serif; font-style:italic; font-size:clamp(14px,3.6vw,17px);
+  color:var(--hint); opacity:0; transition:opacity .5s ease; padding:0 16px; }
+.hint.show{ opacity:1 }
+
+.toast{ position:absolute; left:50%; top:calc(20px + env(safe-area-inset-top)); transform:translate(-50%,-12px);
+  z-index:130; padding:10px 18px; border-radius:999px; font:500 12px/1 'JetBrains Mono',monospace;
+  letter-spacing:.04em; background:rgba(16,16,18,.95); color:#f0f0f2; border:1px solid rgba(232,232,236,.3);
+  box-shadow:0 8px 30px rgba(0,0,0,.5); opacity:0; pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease; max-width:86vw; text-align:center }
+.toast.show{ opacity:1; transform:translate(-50%,0) }
+
+@media (prefers-reduced-motion: reduce){
+  .brand.hero .chip{ animation:none } .brand.hero::after{ display:none }
 }
 </style>
 </head>
 <body>
 
-<section class="master">
-  <div class="head">
-    <div class="label fade-in">— grupo malory · concepts · 10 ways</div>
-    <h1 class="title fade-in">Dez maneiras de conectar uma família de marcas</h1>
-    <p class="sub fade-in">Cada concept explora a relação Grupo Malory ⇄ sub-marcas (Malory Connect · OxePay · WowLog · Malory Entretenimento · Iaí) com uma estética distinta. Tudo em GSAP + ScrollTrigger + Lenis · movimento lento, cinematográfico. Clique pra abrir live.</p>
+<section class="compass-page" id="page">
+  <div class="atmos"><div class="grain"></div></div>
+  <button class="skip" id="skip">pular intro ›</button>
+
+  <div class="compass" id="compass">
+    <div class="layer rose">
+      <svg viewBox="0 0 760 760" aria-hidden="true">
+        <circle class="ring" cx="380" cy="380" r="368"/>
+        <circle class="ring dim" cx="380" cy="380" r="206" stroke-dasharray="1 7"/>
+        <g class="tickwrap" id="ticks" stroke-width="1"></g>
+      </svg>
+    </div>
+
+    <div class="layer needle" id="needle">
+      <svg viewBox="0 0 760 760" aria-hidden="true">
+        <line class="line" x1="380" y1="380" x2="380" y2="156" stroke-width="2"/>
+        <polygon class="line-tip" points="380,140 372,166 388,166"/>
+        <line class="line-tail" x1="380" y1="380" x2="380" y2="470" stroke-width="1.5"/>
+        <circle class="dot" cx="380" cy="380" r="4.5"/>
+      </svg>
+    </div>
+
+    <div class="dial" id="dial">
+      <div class="face"></div>
+      <div class="logo"><img src="assets/logos/grupo-malory.png" alt="Grupo Malory"></div>
+    </div>
+
+    <div class="hud" id="hud"><div class="h-name" id="hudName"></div><div class="h-deg" id="hudDeg"></div></div>
+
+    <a class="brand hero" style="--a:0deg" data-name="iAÍ" data-deg="N · 000°"
+       data-cta="toque de novo para acessar iAÍ" data-url="https://iai.grupomalory.com" aria-label="iAÍ, norte, negócio principal">
+      <div class="chip"><img src="assets/logos/iai.png" alt="iAÍ"></div>
+    </a>
+    <a class="brand" style="--a:45deg" data-name="Malory Connect" data-deg="NE · 045°"
+       data-cta="toque de novo para acessar Malory Connect" data-url="https://maloryconnect.com" aria-label="Malory Connect, nordeste">
+      <div class="chip"><img src="assets/logos/malory-connect.png" alt="Malory Connect"></div>
+    </a>
+    <a class="brand" style="--a:90deg" data-name="WOW Logistics" data-deg="L · 090°"
+       data-cta="toque de novo para acessar WOW Logistics" data-url="https://wowlognow.com" aria-label="WOW Logistics, leste">
+      <div class="chip"><img src="assets/logos/wowlog.png" alt="WOW Logistics"></div>
+    </a>
+    <a class="brand" style="--a:270deg" data-name="Malory Entretenimento" data-deg="O · 270°"
+       data-cta="toque de novo para acessar Malory Entretenimento" data-url="https://entretenimento.grupomalory.com" aria-label="Malory Entretenimento, oeste">
+      <div class="chip"><img src="assets/logos/malory-entretenimento-light.png" alt="Malory Entretenimento"></div>
+    </a>
+    <a class="brand" style="--a:315deg" data-name="OxePay" data-deg="NO · 315°"
+       data-cta="toque de novo para acessar OxePay" data-url="https://useoxepay.com.br" aria-label="OxePay, noroeste">
+      <div class="chip"><img src="assets/logos/oxepay.png" alt="OxePay"></div>
+    </a>
+
+    <a class="brand contact" style="--a:225deg" data-name="WhatsApp" data-deg="+55 83 99806-0678"
+       data-cta="toque de novo para falar com Malory no WhatsApp" data-url="https://wa.me/5583998060678" aria-label="WhatsApp">
+      <div class="chip"><svg viewBox="0 0 48 48">
+        <path d="M8.5 39.5l2.2-7.6A15.5 15.5 0 1 1 16.6 37.4L8.5 39.5Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M19.2 16.9c-.3-.7-.6-.7-.9-.7h-.8c-.3 0-.8.1-1.2.5-.4.5-1.6 1.6-1.6 3.8s1.6 4.4 1.8 4.7c.2.3 3.1 4.9 7.6 6.7 3.7 1.4 4.5 1.2 5.3 1.1.8-.1 2.6-1.1 3-2.1.4-1 .4-1.9.3-2.1-.1-.2-.4-.3-.9-.5-.5-.2-2.6-1.3-3-1.4-.4-.2-.7-.2-1 .2-.3.5-1.1 1.4-1.3 1.7-.2.2-.5.3-.9.1-.5-.2-1.9-.7-3.6-2.2-1.3-1.2-2.2-2.6-2.5-3.1-.2-.5 0-.7.2-.9.2-.2.5-.5.7-.8.2-.3.3-.5.5-.8.1-.3.1-.5 0-.7-.1-.2-.9-2.3-1.3-3.1Z" fill="currentColor"/>
+      </svg></div>
+    </a>
+    <a class="brand contact" style="--a:180deg" data-name="E-mail" data-deg="gabriel@grupomalory.com"
+       data-cta="toque de novo para nos enviar um e-mail" data-url="mailto:gabriel@grupomalory.com" aria-label="E-mail">
+      <div class="chip"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
+        <rect x="6" y="11" width="36" height="26" rx="3.5"/>
+        <path d="M7.5 13.5 24 26.5 40.5 13.5"/>
+      </svg></div>
+    </a>
+    <a class="brand contact" style="--a:135deg" data-name="Instagram" data-deg="@eumalory"
+       data-cta="toque de novo para acessar o Insta de Malory" data-url="https://instagram.com/eumalory" aria-label="Instagram">
+      <div class="chip"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4">
+        <rect x="9" y="9" width="30" height="30" rx="8.5"/>
+        <circle cx="24" cy="24" r="7.5"/>
+        <circle cx="32.6" cy="15.4" r="1.9" fill="currentColor" stroke="none"/>
+      </svg></div>
+    </a>
   </div>
 
-  <div class="grid">
-    <a class="card reveal" href="v01/index.html">
-      <span class="num">01</span><span class="name">Constellation</span>
-      <p class="desc">Cosmos escuro · marcas como estrelas conectadas · parallax do mouse · pulso de luz</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v02/index.html">
-      <span class="num">02</span><span class="name">Magnetic Field</span>
-      <p class="desc">Paper claro · curvas magnéticas SVG · anel rotativo · nós com pull no hover</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v03/index.html">
-      <span class="num">03</span><span class="name">Editorial Maison</span>
-      <p class="desc">Cream papel · Malory italic dominante · sumário em capítulos numerados · magazine</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v04/index.html">
-      <span class="num">04</span><span class="name">Atomic Orbit</span>
-      <p class="desc">3D perspective · 5 órbitas inclinadas · elétrons rotativos · profundidade real</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v05/index.html">
-      <span class="num">05</span><span class="name">Sound Wave Echo</span>
-      <p class="desc">Ondas concêntricas pulsando · ritmo de sinal · cinco marcadores em frequências distintas</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v06/index.html">
-      <span class="num">06</span><span class="name">Wireframe Architecture</span>
-      <p class="desc">Blueprint navy · grid técnico · linhas com distâncias em pixels · estética arquitetônica</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v07/index.html">
-      <span class="num">07</span><span class="name">Liquid Mercury</span>
-      <p class="desc">Light + orgânico · blobs em blur · gotas que pulsam · paths SVG fluidos</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v08/index.html">
-      <span class="num">08</span><span class="name">Vintage Compass</span>
-      <p class="desc">Rosa dos ventos dourada · rotação lenta · marcas em pontos cardeais · parchment grain</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v09/index.html">
-      <span class="num">09</span><span class="name">Glass Halo</span>
-      <p class="desc">Light premium · halo conic · joias suspensas com chain · refinamento puro</p>
-      <span class="open">abrir →</span>
-    </a>
-    <a class="card reveal" href="v10/index.html">
-      <span class="num">10</span><span class="name">Cinema Reel</span>
-      <p class="desc">Filme em 5 atos · scroll vertical com ScrollTrigger · cada marca uma cena · parallax narrativo</p>
-      <span class="open">abrir →</span>
-    </a>
-  </div>
-
-  <div class="foot fade-in">— 10 / 10 prontas · ao vivo via github pages · responda com o número da vencedora —</div>
+  <div class="hint" id="hint">aponte para uma direção</div>
+  <div class="toast" id="toast"></div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="shared/init.js"></script>
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var page=document.getElementById('page'), needle=document.getElementById('needle'),
+      dial=document.getElementById('dial'), hud=document.getElementById('hud'),
+      hudName=document.getElementById('hudName'), hudDeg=document.getElementById('hudDeg'),
+      hint=document.getElementById('hint'), skip=document.getElementById('skip'), toast=document.getElementById('toast');
+  var brands=[].slice.call(document.querySelectorAll('.brand'));
+  var hasGSAP=typeof window.gsap!=='undefined';
+
+  (function(){ var t=document.getElementById('ticks'),h='';
+    for(var i=0;i<72;i++){ var a=(i*5)*Math.PI/180,big=(i%6===0),r1=big?348:358,r2=366;
+      h+='<line class="tick" x1="'+(380+Math.cos(a)*r1)+'" y1="'+(380+Math.sin(a)*r1)+'" x2="'+(380+Math.cos(a)*r2)+'" y2="'+(380+Math.sin(a)*r2)+'" stroke-opacity="'+(big?.75:.4)+'"/>'; }
+    t.innerHTML=h; })();
+
+  var armed=null, lock=false, tl=null;
+  function curRot(){ return hasGSAP?(gsap.getProperty(needle,'rotation')||0):0; }
+  function setRot(v){ needle.style.transform='rotate('+v+'deg)'; }
+  function pointTo(angle,dur){ var c=curRot(), d=(((angle-c)%360)+540)%360-180;
+    if(hasGSAP){ gsap.to(needle,{rotation:c+d,duration:dur||0.95,ease:'elastic.out(1,0.5)'}); } else setRot(c+d);
+    if(navigator.vibrate){ try{navigator.vibrate(14);}catch(e){} } }
+  function clearActive(){ brands.forEach(function(b){b.classList.remove('active');}); hud.classList.remove('show'); armed=null; }
+  function arm(b){ brands.forEach(function(x){x.classList.toggle('active',x===b);});
+    hudName.textContent=b.dataset.name; hudDeg.textContent=b.dataset.deg; hud.classList.add('show');
+    pointTo(parseFloat(b.style.getPropertyValue('--a')));
+    hint.textContent=b.dataset.cta; hint.classList.add('show'); armed=b; }
+  function openBrand(b){ if(b.dataset.url.indexOf('mailto:')===0){ window.location.href=b.dataset.url; } else { window.open(b.dataset.url,'_blank'); } }
+  function handle(b){ if(lock) return; if(armed===b) openBrand(b); else arm(b); }
+
+  brands.forEach(function(b){
+    b.addEventListener('click',function(e){ e.preventDefault(); handle(b); });
+    b.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); handle(b); } });
+  });
+  page.addEventListener('click',function(e){ if(lock) return;
+    if(!e.target.closest('.brand')){ if(armed){ clearActive(); pointTo(0,0.8); hint.textContent='aponte para uma direção'; } } });
+
+  function showFinal(){ if(hasGSAP){ gsap.set(needle,{rotation:0}); gsap.set([dial],{opacity:1,scale:1}); gsap.set(brands,{opacity:1,scale:1}); }
+    else { setRot(0); dial.style.opacity=1; brands.forEach(function(b){b.style.opacity=1;}); }
+    hint.textContent='aponte para uma direção'; hint.classList.add('show'); lock=false; skip.classList.remove('show'); }
+
+  function runIntro(){ if(tl){tl.kill();}
+    clearActive(); hint.classList.remove('show');
+    if(hasGSAP){ gsap.set([dial,hud],{opacity:0}); gsap.set(brands,{opacity:0}); gsap.set(needle,{rotation:0}); }
+    else { dial.style.opacity=0; brands.forEach(function(b){b.style.opacity=0;}); }
+    lock=true; skip.classList.add('show');
+    tl=gsap.timeline({ onComplete:function(){ lock=false; skip.classList.remove('show'); }});
+    tl.to(needle,{rotation:990,duration:0.95,ease:'power4.out'});
+    tl.to(needle,{rotation:1080,duration:0.75,ease:'elastic.out(1,0.45)'});
+    tl.add(function(){ gsap.set(needle,{rotation:0}); });
+    tl.fromTo(dial,{opacity:0,scale:.9},{opacity:1,scale:1,duration:.5,ease:'power2.out'},'-=0.55');
+    tl.fromTo(brands,{opacity:0,scale:.8},{opacity:1,scale:1,duration:.55,stagger:0.07,ease:'back.out(1.5)'},'-=0.25');
+    tl.add(function(){ hint.textContent='aponte para uma direção'; hint.classList.add('show'); });
+  }
+  function skipIntro(){ if(tl){tl.kill();} showFinal(); }
+  skip.addEventListener('click',skipIntro);
+
+  var seen=false; try{ seen=sessionStorage.getItem('mc_intro')==='1'; }catch(e){}
+  function boot(){
+    if(seen || reduce || !hasGSAP){ showFinal(); }
+    else { runIntro(); try{ sessionStorage.setItem('mc_intro','1'); }catch(e){} }
+  }
+  if(document.readyState!=='loading') boot();
+  else document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
 </body>
 </html>
