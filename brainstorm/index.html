@@ -118,22 +118,25 @@ footer .rec-block b{ color:var(--gold); font-weight:600; }
 .bg-mesh .crosshair::after{ top:0; bottom:0; left:50%; width:1px; }
 
 /* ============ C1 — BEACON ============ */
-.click-c1 .stage{ background:#0a0a0c; }
-.click-c1 .stage::after{ content:''; position:absolute; left:50%; top:50%;
-  width:600px; height:600px; transform-origin:0 0;
-  background:conic-gradient(from 270deg, transparent 60%, rgba(255,255,255,0) 65%, var(--beam) 75%, rgba(255,255,255,0) 85%, transparent 90%);
-  filter:blur(10px); opacity:.55;
-  animation:beaconRotate 12s steps(5) infinite;
+.click-c1 .stage{ background:#0a0a0c; overflow:hidden; --beam:#ffd400; }
+.click-c1 .stage::before{
+  content:''; position:absolute; left:50%; top:50%;
+  width:520px; height:200px;
+  background:radial-gradient(ellipse closest-side at left center, var(--beam) 0%, var(--beam) 15%, rgba(0,0,0,0) 75%);
+  transform-origin:0 50%;
+  transform:translate(0,-50%) rotate(-90deg);
+  filter:blur(20px); opacity:.62;
+  animation:beaconSweep 14s ease-in-out infinite;
+  will-change:transform;
 }
-@keyframes beaconRotate{
-  0%   { transform:rotate(0deg);   --beam:#ffd400; }
-  20%  { transform:rotate(45deg);  --beam:#ff6a3d; }
-  40%  { transform:rotate(90deg);  --beam:#2563eb; }
-  60%  { transform:rotate(270deg); --beam:#a855f7; }
-  80%  { transform:rotate(315deg); --beam:#f59e0b; }
-  100% { transform:rotate(360deg); --beam:#ffd400; }
+@keyframes beaconSweep{
+  0%,   14%  { transform:translate(0,-50%) rotate(-90deg);  --beam:#ffd400; }  /* N · iAÍ */
+  18%,  32%  { transform:translate(0,-50%) rotate(-45deg);  --beam:#ff6a3d; }  /* NE · Connect */
+  36%,  50%  { transform:translate(0,-50%) rotate(0deg);    --beam:#2563eb; }  /* L · WOW */
+  54%,  68%  { transform:translate(0,-50%) rotate(180deg);  --beam:#a855f7; }  /* O · Entret. */
+  72%,  86%  { transform:translate(0,-50%) rotate(225deg);  --beam:#f59e0b; }  /* NO · OxePay */
+  90%, 100%  { transform:translate(0,-50%) rotate(270deg);  --beam:#ffd400; }  /* volta N */
 }
-.click-c1 .stage{ --beam:#ffd400; }
 
 /* ============ C2 — WASH ============ */
 .click-c2 .stage{ background:#0a0a0c; transition:background 1.6s ease; animation:washCycle 16s infinite; }
@@ -435,10 +438,25 @@ footer .rec-block b{ color:var(--gold); font-weight:600; }
   </div>
 
   <div style="margin-top:28px; font-size:12px; color:var(--muted);">
-    <span class="mono">brainstorm v01</span> · auto-redeploy a cada commit · <a href="../" style="color:var(--gold); text-decoration:none;">← voltar pra bússola ao vivo</a>
+    <span class="mono">brainstorm v02</span> · auto-redeploy a cada commit · <a href="../" style="color:var(--gold); text-decoration:none;">← voltar pra bússola ao vivo</a>
   </div>
 </footer>
 
 </div>
+
+<script>
+/* C3 — cicla pelas 5 marcas a cada 2.4s */
+(function(){
+  var layers = document.querySelectorAll('.click-c3 .layer');
+  if(!layers.length) return;
+  var idx = 0;
+  setInterval(function(){
+    layers.forEach(function(l){ l.classList.remove('show'); });
+    idx = (idx + 1) % layers.length;
+    layers[idx].classList.add('show');
+  }, 2400);
+})();
+</script>
+
 </body>
 </html>
