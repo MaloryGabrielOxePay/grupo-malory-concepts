@@ -24,6 +24,11 @@
   --hud-name: #f4f4f6;
   --hud-deg: rgba(232,232,236,.5);
   --hint: rgba(232,232,236,.55);
+  /* paleta por direção (feixe do clique) — iAÍ N · Connect NE · WOW L
+     · OxePay NO · Entret. O · WhatsApp SO · E-mail S · Instagram SE */
+  --beam-iai:#ffd400; --beam-connect:#ff6a3d; --beam-wow:#2f6bff;
+  --beam-oxe:#f59e0b; --beam-ent:#a855f7;
+  --beam-wa:#25d366; --beam-mail:#38bdf8; --beam-ig:#e1306c;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -35,7 +40,17 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
   display:grid; place-items:center; overflow:hidden; background:var(--ink);
 }
 .atmos{position:absolute; inset:0; pointer-events:none}
-.grain{ position:absolute; inset:0; opacity:.22; mix-blend-mode:screen;
+
+/* ===== G1 · ATLAS — background geral (repouso): curvas topográficas ===== */
+.atlas{ position:absolute; inset:0; overflow:hidden; opacity:.13; z-index:0;
+  -webkit-mask:radial-gradient(ellipse 76% 76% at 50% 50%, transparent 13%, #000 40%, #000 66%, transparent 100%);
+          mask:radial-gradient(ellipse 76% 76% at 50% 50%, transparent 13%, #000 40%, #000 66%, transparent 100%); }
+.atlas-rot{ position:absolute; inset:-22%; transform-origin:50% 50%; animation:atlasDrift 150s linear infinite; }
+.atlas svg{ width:100%; height:100%; display:block }
+.atlas path{ fill:none; stroke:#9fb6cf; stroke-width:.8; vector-effect:non-scaling-stroke }
+@keyframes atlasDrift{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+.grain{ position:absolute; inset:0; opacity:.22; mix-blend-mode:screen; z-index:1;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.9 0 0 0 0 0.95 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
 .compass{ position:relative; width:var(--size); height:var(--size) }
@@ -44,6 +59,19 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 .rose .ring{ fill:none; stroke:var(--line) }
 .rose .ring.dim{ stroke:var(--line-dim) }
 .rose .tick{ stroke:var(--tick) }
+
+/* ===== C1 · BEACON — background do clique: feixe direcional da cor da marca ===== */
+.beacon{ position:absolute; inset:-72%; z-index:0; pointer-events:none;
+  transform:rotate(var(--beam-angle,0deg)); transform-origin:50% 50%;
+  background:conic-gradient(from 0deg at 50% 50%,
+     var(--beam,#ffd400) 0deg, rgba(0,0,0,0) 27deg,
+     rgba(0,0,0,0) 333deg, var(--beam,#ffd400) 360deg);
+  -webkit-mask:radial-gradient(closest-side, #000 5%, rgba(0,0,0,.82) 22%, rgba(0,0,0,0) 60%);
+          mask:radial-gradient(closest-side, #000 5%, rgba(0,0,0,.82) 22%, rgba(0,0,0,0) 60%);
+  filter:blur(24px); opacity:0;
+  transition:opacity .55s ease, transform .85s cubic-bezier(.16,1,.3,1);
+  will-change:opacity, transform; }
+.beacon.show{ opacity:.5 }
 
 /* AGULHA — ACIMA das logos (z 25), abaixo do mostrador central (z 30) */
 .needle{ transform-origin:50% 50%; will-change:transform; z-index:25 }
@@ -54,7 +82,8 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
 .dial{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
   width:var(--disc); height:var(--disc); border-radius:50%; display:grid; place-items:center; z-index:30; }
-.dial .face{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(232,232,236,.18); }
+.dial .face{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(232,232,236,.18);
+  background:radial-gradient(circle at 50% 42%, rgba(12,12,15,.92), rgba(12,12,15,.66) 70%, transparent); }
 .dial .logo{ position:relative; z-index:2; width:72% }
 .dial .logo img{ width:100%; display:block }
 
@@ -71,10 +100,11 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
   opacity:0; }
 .brand .chip{ width:100%; aspect-ratio:1/1; border-radius:50%; position:relative; display:grid; place-items:center;
   padding:calc(var(--size)*.02); border:1px solid transparent;
-  transition:transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease; }
+  transition:transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease, box-shadow .4s ease; }
 .brand .chip img{ max-width:100%; max-height:100%; display:block }
 .brand:hover .chip{ transform:scale(1.05) }
-.brand.active .chip{ transform:scale(1.12); border-color:rgba(232,232,236,.5) }
+.brand.active .chip{ transform:scale(1.12); border-color:rgba(232,232,236,.55);
+  box-shadow:0 0 34px -8px var(--chip-glow, rgba(232,232,236,.4)) }
 
 .contact{ width:var(--contact) }
 .contact .chip{ color:var(--icon); border:1px solid rgba(232,232,236,.2) }
@@ -108,18 +138,32 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
   transition:opacity .3s ease, transform .3s ease; max-width:86vw; text-align:center }
 .toast.show{ opacity:1; transform:translate(-50%,0) }
 
+@media (max-width:560px){
+  .beacon{ filter:blur(16px); inset:-58% }
+  .atlas{ opacity:.11 }
+}
+
 @media (prefers-reduced-motion: reduce){
   .brand.hero .chip{ animation:none } .brand.hero::after{ display:none }
+  .atlas-rot{ animation:none }
+  .beacon{ transition:opacity .3s ease }
 }
 </style>
 </head>
 <body>
 
 <section class="compass-page" id="page">
-  <div class="atmos"><div class="grain"></div></div>
+  <div class="atmos">
+    <div class="atlas"><div class="atlas-rot">
+      <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g id="atlasPaths"></g></svg>
+    </div></div>
+    <div class="grain"></div>
+  </div>
   <button class="skip" id="skip">pular intro ›</button>
 
   <div class="compass" id="compass">
+    <div class="layer beacon" id="beacon"></div>
+
     <div class="layer rose">
       <svg viewBox="0 0 760 760" aria-hidden="true">
         <circle class="ring" cx="380" cy="380" r="368"/>
@@ -144,42 +188,42 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
     <div class="hud" id="hud"><div class="h-name" id="hudName"></div><div class="h-deg" id="hudDeg"></div></div>
 
-    <a class="brand hero" style="--a:0deg" data-name="iAÍ" data-deg="N · 000°"
+    <a class="brand hero" style="--a:0deg" data-name="iAÍ" data-deg="N · 000°" data-beam="#ffd400"
        data-cta="toque de novo para acessar iAÍ" data-url="https://iai.grupomalory.com" aria-label="iAÍ, norte, negócio principal">
       <div class="chip"><img src="../assets/logos/iai.png" alt="iAÍ"></div>
     </a>
-    <a class="brand" style="--a:45deg" data-name="Malory Connect" data-deg="NE · 045°"
+    <a class="brand" style="--a:45deg" data-name="Malory Connect" data-deg="NE · 045°" data-beam="#ff6a3d"
        data-cta="toque de novo para acessar Malory Connect" data-url="https://maloryconnect.com" aria-label="Malory Connect, nordeste">
       <div class="chip"><img src="../assets/logos/malory-connect.png" alt="Malory Connect"></div>
     </a>
-    <a class="brand" style="--a:90deg" data-name="WOW Logistics" data-deg="L · 090°"
+    <a class="brand" style="--a:90deg" data-name="WOW Logistics" data-deg="L · 090°" data-beam="#2f6bff"
        data-cta="toque de novo para acessar WOW Logistics" data-url="https://wowlognow.com" aria-label="WOW Logistics, leste">
       <div class="chip"><img src="../assets/logos/wowlog.png" alt="WOW Logistics"></div>
     </a>
-    <a class="brand" style="--a:270deg" data-name="Malory Entretenimento" data-deg="O · 270°"
+    <a class="brand" style="--a:270deg" data-name="Malory Entretenimento" data-deg="O · 270°" data-beam="#a855f7"
        data-cta="toque de novo para acessar Malory Entretenimento" data-url="https://entretenimento.grupomalory.com" aria-label="Malory Entretenimento, oeste">
       <div class="chip"><img src="../assets/logos/malory-entretenimento-light.png" alt="Malory Entretenimento"></div>
     </a>
-    <a class="brand" style="--a:315deg" data-name="OxePay" data-deg="NO · 315°"
+    <a class="brand" style="--a:315deg" data-name="OxePay" data-deg="NO · 315°" data-beam="#f59e0b"
        data-cta="toque de novo para acessar OxePay" data-url="https://useoxepay.com.br" aria-label="OxePay, noroeste">
       <div class="chip"><img src="../assets/logos/oxepay.png" alt="OxePay"></div>
     </a>
 
-    <a class="brand contact" style="--a:225deg" data-name="WhatsApp" data-deg="+55 83 99806-0678"
+    <a class="brand contact" style="--a:225deg" data-name="WhatsApp" data-deg="+55 83 99806-0678" data-beam="#25d366"
        data-cta="toque de novo para falar com Malory no WhatsApp" data-url="https://wa.me/5583998060678" aria-label="WhatsApp">
       <div class="chip"><svg viewBox="0 0 48 48">
         <path d="M8.5 39.5l2.2-7.6A15.5 15.5 0 1 1 16.6 37.4L8.5 39.5Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
         <path d="M19.2 16.9c-.3-.7-.6-.7-.9-.7h-.8c-.3 0-.8.1-1.2.5-.4.5-1.6 1.6-1.6 3.8s1.6 4.4 1.8 4.7c.2.3 3.1 4.9 7.6 6.7 3.7 1.4 4.5 1.2 5.3 1.1.8-.1 2.6-1.1 3-2.1.4-1 .4-1.9.3-2.1-.1-.2-.4-.3-.9-.5-.5-.2-2.6-1.3-3-1.4-.4-.2-.7-.2-1 .2-.3.5-1.1 1.4-1.3 1.7-.2.2-.5.3-.9.1-.5-.2-1.9-.7-3.6-2.2-1.3-1.2-2.2-2.6-2.5-3.1-.2-.5 0-.7.2-.9.2-.2.5-.5.7-.8.2-.3.3-.5.5-.8.1-.3.1-.5 0-.7-.1-.2-.9-2.3-1.3-3.1Z" fill="currentColor"/>
       </svg></div>
     </a>
-    <a class="brand contact" style="--a:180deg" data-name="E-mail" data-deg="gabriel@grupomalory.com"
+    <a class="brand contact" style="--a:180deg" data-name="E-mail" data-deg="gabriel@grupomalory.com" data-beam="#38bdf8"
        data-cta="toque de novo para nos enviar um e-mail" data-url="mailto:gabriel@grupomalory.com" aria-label="E-mail">
       <div class="chip"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
         <rect x="6" y="11" width="36" height="26" rx="3.5"/>
         <path d="M7.5 13.5 24 26.5 40.5 13.5"/>
       </svg></div>
     </a>
-    <a class="brand contact" style="--a:135deg" data-name="Instagram" data-deg="@eumalory"
+    <a class="brand contact" style="--a:135deg" data-name="Instagram" data-deg="@eumalory" data-beam="#e1306c"
        data-cta="toque de novo para acessar o Insta de Malory" data-url="https://instagram.com/eumalory" aria-label="Instagram">
       <div class="chip"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4">
         <rect x="9" y="9" width="30" height="30" rx="8.5"/>
@@ -203,24 +247,41 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
   var page=document.getElementById('page'), needle=document.getElementById('needle'),
       dial=document.getElementById('dial'), hud=document.getElementById('hud'),
       hudName=document.getElementById('hudName'), hudDeg=document.getElementById('hudDeg'),
-      hint=document.getElementById('hint'), skip=document.getElementById('skip'), toast=document.getElementById('toast');
+      hint=document.getElementById('hint'), skip=document.getElementById('skip'), toast=document.getElementById('toast'),
+      beacon=document.getElementById('beacon');
   var brands=[].slice.call(document.querySelectorAll('.brand'));
   var hasGSAP=typeof window.gsap!=='undefined';
 
+  /* anel da bússola */
   (function(){ var t=document.getElementById('ticks'),h='';
     for(var i=0;i<72;i++){ var a=(i*5)*Math.PI/180,big=(i%6===0),r1=big?348:358,r2=366;
       h+='<line class="tick" x1="'+(380+Math.cos(a)*r1)+'" y1="'+(380+Math.sin(a)*r1)+'" x2="'+(380+Math.cos(a)*r2)+'" y2="'+(380+Math.sin(a)*r2)+'" stroke-opacity="'+(big?.75:.4)+'"/>'; }
     t.innerHTML=h; })();
 
+  /* G1 · Atlas — gera 7 curvas de nível concêntricas e irregulares (determinístico) */
+  (function(){ var g=document.getElementById('atlasPaths'); if(!g) return;
+    var cx=500, cy=500, rings=7, pts=30, h='';
+    for(var r=0;r<rings;r++){ var baseR=120+r*55, d='';
+      for(var i=0;i<=pts;i++){ var t=i/pts*Math.PI*2;
+        var jit=Math.sin(t*3+r*1.3)*11 + Math.sin(t*5+r*0.7)*6 + Math.cos(t*2-r*0.9)*9;
+        var rr=baseR+jit, x=cx+Math.cos(t)*rr, y=cy+Math.sin(t)*rr*0.9;
+        d+=(i===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)+' '; }
+      h+='<path d="'+d+'Z"/>'; }
+    g.innerHTML=h; })();
+
   var armed=null, lock=false, tl=null;
   function curRot(){ return hasGSAP?(gsap.getProperty(needle,'rotation')||0):0; }
   function setRot(v){ needle.style.transform='rotate('+v+'deg)'; }
-  function pointTo(angle,dur){ var c=curRot(), d=(((angle-c)%360)+540)%360-180;
-    if(hasGSAP){ gsap.to(needle,{rotation:c+d,duration:dur||0.95,ease:'elastic.out(1,0.5)'}); } else setRot(c+d);
+  function pointTo(angle,dur){ var c=curRot(), d=(((angle-c)%360)+540)%360-180, target=c+d;
+    if(hasGSAP){ gsap.to(needle,{rotation:target,duration:dur||0.95,ease:'elastic.out(1,0.5)'}); } else setRot(target);
+    if(beacon){ beacon.style.setProperty('--beam-angle', target+'deg'); }
     if(navigator.vibrate){ try{navigator.vibrate(14);}catch(e){} } }
-  function clearActive(){ brands.forEach(function(b){b.classList.remove('active');}); hud.classList.remove('show'); armed=null; }
+  function clearActive(){ brands.forEach(function(b){b.classList.remove('active');}); hud.classList.remove('show');
+    if(beacon){ beacon.classList.remove('show'); } armed=null; }
   function arm(b){ brands.forEach(function(x){x.classList.toggle('active',x===b);});
     hudName.textContent=b.dataset.name; hudDeg.textContent=b.dataset.deg; hud.classList.add('show');
+    var beam=b.dataset.beam||'#f2f2f4'; b.style.setProperty('--chip-glow', beam);
+    if(beacon){ beacon.style.setProperty('--beam', beam); beacon.classList.add('show'); }
     pointTo(parseFloat(b.style.getPropertyValue('--a')));
     hint.textContent=b.dataset.cta; hint.classList.add('show'); armed=b; }
   function openBrand(b){ if(b.dataset.url.indexOf('mailto:')===0){ window.location.href=b.dataset.url; } else { window.open(b.dataset.url,'_blank'); } }
