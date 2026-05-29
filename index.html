@@ -45,19 +45,20 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 .atmos{position:absolute; inset:0; pointer-events:none}
 
 /* ===== G1 · ATLAS — background geral (repouso): curvas topográficas ===== */
-.atlas{ position:absolute; inset:0; overflow:hidden; opacity:.26; z-index:0;
+.atlas{ position:absolute; inset:0; overflow:hidden; opacity:.18; z-index:0;
   -webkit-mask:radial-gradient(ellipse 78% 78% at 50% 50%, transparent 11%, #000 38%, #000 68%, transparent 100%);
           mask:radial-gradient(ellipse 78% 78% at 50% 50%, transparent 11%, #000 38%, #000 68%, transparent 100%); }
 .atlas-rot{ position:absolute; inset:-22%; transform-origin:50% 50%; animation:atlasDrift 100s linear infinite; }
 .atlas svg{ width:100%; height:100%; display:block }
-.atlas path{ fill:none; stroke:#b3c4db; stroke-width:1; vector-effect:non-scaling-stroke }
+.atlas path{ fill:none; stroke:#9fb1c8; stroke-width:.9; vector-effect:non-scaling-stroke }
 @keyframes atlasDrift{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
 .grain{ position:absolute; inset:0; opacity:.22; mix-blend-mode:screen; z-index:1;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.9 0 0 0 0 0.95 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
 .compass{ position:relative; width:var(--size); height:var(--size) }
-.layer{ position:absolute; inset:0 }
+/* camadas decorativas NUNCA capturam toque — só as .brand são clicáveis */
+.layer{ position:absolute; inset:0; pointer-events:none }
 .rose svg,.needle svg{ width:100%; height:100% }
 .rose .ring{ fill:none; stroke:var(--line) }
 .rose .ring.dim{ stroke:var(--line-dim) }
@@ -84,7 +85,7 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 .needle .dot{ fill:var(--hub) }
 
 .dial{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:var(--disc); height:var(--disc); border-radius:50%; display:grid; place-items:center; z-index:30; }
+  width:var(--disc); height:var(--disc); border-radius:50%; display:grid; place-items:center; z-index:30; pointer-events:none; }
 .dial .face{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(232,232,236,.18);
   background:radial-gradient(circle at 50% 42%, rgba(12,12,15,.92), rgba(12,12,15,.66) 70%, transparent); }
 .dial .logo{ position:relative; z-index:2; width:72% }
@@ -98,7 +99,7 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 .hud .h-deg{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em; color:var(--hud-deg); margin-top:6px }
 
 .brand{ position:absolute; top:50%; left:50%; width:var(--chip); display:grid; place-items:center;
-  text-decoration:none; cursor:pointer; z-index:20; -webkit-tap-highlight-color:transparent;
+  text-decoration:none; cursor:pointer; z-index:20; pointer-events:auto; -webkit-tap-highlight-color:transparent;
   transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1 * var(--R))) rotate(calc(-1 * var(--a)));
   opacity:0; }
 .brand .chip{ width:100%; aspect-ratio:1/1; border-radius:50%; position:relative; display:grid; place-items:center;
@@ -143,12 +144,11 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
 @media (max-width:560px){
   .beacon{ filter:blur(14px); inset:-58% }
-  .atlas{ opacity:.2 }
+  .atlas{ opacity:.15 }
 }
 
 @media (prefers-reduced-motion: reduce){
   .brand.hero .chip{ animation:none } .brand.hero::after{ display:none }
-  .atlas-rot{ animation:none }
   .beacon{ transition:opacity .3s ease }
 }
 </style>
