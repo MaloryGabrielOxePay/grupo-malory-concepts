@@ -98,8 +98,7 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
 .dial{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
   width:var(--disc); height:var(--disc); border-radius:50%; display:grid; place-items:center; z-index:30; pointer-events:none; }
-.dial .face{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(232,232,236,.16);
-  background:radial-gradient(circle at 50% 42%, rgba(12,12,15,.55), rgba(12,12,15,.22) 70%, transparent); }
+.dial .face{ display:none; }  /* sombra/disco escuro atras do logo central REMOVIDO */
 .dial .logo{ position:relative; z-index:2; width:100%; height:100%; display:grid; place-items:center }
 .dial .logo img{ width:100%; height:100%; object-fit:contain; display:block }
 
@@ -161,9 +160,9 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 @media (max-width:560px){
   :root{ --size: clamp(280px, min(92vw, 70vh), 560px); }
   .beacon{ filter:blur(34px); inset:-58% }
-  .atlas{ opacity:.34 }                 /* mais visivel / menos escuro no celular */
+  .atlas{ opacity:.15 }                 /* linhas discretas no celular (nao ofuscar a tela) */
   .atlas-rot{ animation-duration:48s }  /* mais rapido -> movimento perceptivel */
-  .globe{ background-image:url(/assets/img/globe-mobile.jpg); opacity:.2 }
+  .globe{ background-image:url(/assets/img/globe-mobile.jpg); opacity:.28 }  /* mapa Earth NASA mais visivel */
   .hud{ bottom:calc(env(safe-area-inset-bottom) + 148px); }  /* faixa limpa: abaixo dos contatos, acima do hint */
 }
 
