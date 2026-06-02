@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Grupo Malory</title>
 <link rel="stylesheet" href="/shared/base.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0a0c">
 <style>
 :root{
   --size: clamp(290px, min(86vw, 78vh), 600px);
@@ -44,11 +50,17 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 }
 .atmos{position:absolute; inset:0; pointer-events:none}
 
+/* ===== G0 - GLOBE - NASA Black Marble (mundo conectado), camada mais profunda ===== */
+.globe{ position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:url(/assets/img/globe-desktop.jpg) center/cover no-repeat; opacity:.12;
+  -webkit-mask:radial-gradient(ellipse 74% 74% at 50% 46%, #000 22%, rgba(0,0,0,.45) 54%, transparent 76%);
+          mask:radial-gradient(ellipse 74% 74% at 50% 46%, #000 22%, rgba(0,0,0,.45) 54%, transparent 76%); }
+
 /* ===== G1 · ATLAS — background geral (repouso): curvas topográficas ===== */
 .atlas{ position:absolute; inset:0; overflow:hidden; opacity:.18; z-index:0;
   -webkit-mask:radial-gradient(ellipse 78% 78% at 50% 50%, transparent 11%, #000 38%, #000 68%, transparent 100%);
           mask:radial-gradient(ellipse 78% 78% at 50% 50%, transparent 11%, #000 38%, #000 68%, transparent 100%); }
-.atlas-rot{ position:absolute; inset:-22%; transform-origin:50% 50%; animation:atlasDrift 100s linear infinite; }
+.atlas-rot{ position:absolute; inset:-22%; transform-origin:50% 50%; animation:atlasDrift 80s linear infinite; will-change:transform; backface-visibility:hidden; }
 .atlas svg{ width:100%; height:100%; display:block }
 .atlas path{ fill:none; stroke:#9fb1c8; stroke-width:.9; vector-effect:non-scaling-stroke }
 @keyframes atlasDrift{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
@@ -86,17 +98,20 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
 .dial{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
   width:var(--disc); height:var(--disc); border-radius:50%; display:grid; place-items:center; z-index:30; pointer-events:none; }
-.dial .face{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(232,232,236,.18);
-  background:radial-gradient(circle at 50% 42%, rgba(12,12,15,.92), rgba(12,12,15,.66) 70%, transparent); }
-.dial .logo{ position:relative; z-index:2; width:72% }
-.dial .logo img{ width:100%; display:block }
+.dial .face{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(232,232,236,.16);
+  background:radial-gradient(circle at 50% 42%, rgba(12,12,15,.55), rgba(12,12,15,.22) 70%, transparent); }
+.dial .logo{ position:relative; z-index:2; width:100%; height:100%; display:grid; place-items:center }
+.dial .logo img{ width:100%; height:100%; object-fit:contain; display:block }
 
-.hud{ position:absolute; left:50%; transform:translateX(-50%);
-  bottom:calc(50% - var(--disc)/2 - 46px); text-align:center; z-index:35; pointer-events:none;
-  opacity:0; transition:opacity .35s ease; max-width:86vw; }
+/* HUD = nome + slogan ao clicar. Mobile: faixa inferior (acima do hint). Desktop: lateral direita. */
+.hud{ position:fixed; left:50%; transform:translateX(-50%);
+  bottom:calc(env(safe-area-inset-bottom) + 92px); text-align:center; z-index:35; pointer-events:none;
+  opacity:0; transition:opacity .35s ease; width:min(92vw,560px); }
 .hud.show{ opacity:1 }
-.hud .h-name{ font-family:'Italiana','Spectral',serif; font-style:italic; font-size:26px; color:var(--hud-name); line-height:1 }
-.hud .h-deg{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em; color:var(--hud-deg); margin-top:6px }
+.hud .h-name{ font-family:'Montserrat',system-ui,sans-serif; font-weight:800; font-style:normal;
+  font-size:clamp(19px,5.2vw,30px); letter-spacing:-.01em; line-height:1.05; color:var(--hud-name); }
+.hud .h-deg{ font-family:'Montserrat',system-ui,sans-serif; font-weight:600; font-style:normal;
+  font-size:clamp(12px,3.4vw,15px); letter-spacing:.005em; line-height:1.22; color:rgba(232,232,236,.74); margin-top:7px; }
 
 .brand{ position:absolute; top:50%; left:50%; width:var(--chip); display:grid; place-items:center;
   text-decoration:none; cursor:pointer; z-index:20; pointer-events:auto; -webkit-tap-highlight-color:transparent;
@@ -143,8 +158,21 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 .toast.show{ opacity:1; transform:translate(-50%,0) }
 
 @media (max-width:560px){
+  :root{ --size: clamp(280px, min(92vw, 70vh), 560px); }
   .beacon{ filter:blur(14px); inset:-58% }
-  .atlas{ opacity:.15 }
+  .atlas{ opacity:.26 }                 /* mais visivel / menos escuro no celular */
+  .atlas-rot{ animation-duration:48s }  /* mais rapido -> movimento perceptivel */
+  .globe{ background-image:url(/assets/img/globe-mobile.jpg); opacity:.15 }
+  .hud{ bottom:calc(env(safe-area-inset-bottom) + 148px); }  /* faixa limpa: abaixo dos contatos, acima do hint */
+}
+
+@media (min-width:1024px) and (orientation:landscape){
+  /* desktop horizontal: nome+slogan a direita da bussola, no espaco vazio (nao cobre o logo) */
+  .hud{ left:calc(50% + var(--size)/2 + clamp(20px,3vw,56px)); right:auto; bottom:auto; top:50%;
+        transform:translateY(-50%); text-align:left;
+        width:min(30vw, calc(50vw - var(--size)/2 - clamp(28px,4vw,72px))); }
+  .hud .h-name{ font-size:clamp(24px,2.4vw,40px); }
+  .hud .h-deg{ font-size:clamp(13px,1.15vw,17px); margin-top:10px; }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -157,6 +185,7 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
 <section class="compass-page" id="page">
   <div class="atmos">
+    <div class="globe" aria-hidden="true"></div>
     <div class="atlas"><div class="atlas-rot">
       <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g id="atlasPaths"></g></svg>
     </div></div>
@@ -186,28 +215,28 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
     <div class="dial" id="dial">
       <div class="face"></div>
-      <div class="logo"><img src="/assets/logos/grupo-malory.png" alt="Grupo Malory"></div>
+      <div class="logo"><img src="/assets/logos/grupo-malory-round.png" alt="Grupo Malory"></div>
     </div>
 
     <div class="hud" id="hud"><div class="h-name" id="hudName"></div><div class="h-deg" id="hudDeg"></div></div>
 
-    <a class="brand hero" style="--a:0deg" data-name="iAÍ" data-deg="N · 000°" data-beam="#ffd400"
-       data-cta="toque de novo para acessar iAÍ" data-url="https://iai.grupomalory.com" aria-label="iAÍ, norte, negócio principal">
-      <div class="chip"><img src="/assets/logos/iai.png" alt="iAÍ"></div>
+    <a class="brand hero" style="--a:0deg" data-name="IAÍ" data-deg="Agência Inteligente 🇧🇷" data-beam="#ffd400"
+       data-cta="toque de novo para acessar IAÍ" data-url="https://iai.grupomalory.com" aria-label="IAÍ, norte, negócio principal">
+      <div class="chip"><img src="/assets/logos/iai.png" alt="IAÍ"></div>
     </a>
-    <a class="brand" style="--a:45deg" data-name="Malory Connect" data-deg="NE · 045°" data-beam="#ff6a3d"
+    <a class="brand" style="--a:45deg" data-name="Malory Connect" data-deg="Care You Can Track 🇺🇸" data-beam="#ff6a3d"
        data-cta="toque de novo para acessar Malory Connect" data-url="https://maloryconnect.com" aria-label="Malory Connect, nordeste">
       <div class="chip"><img src="/assets/logos/malory-connect.png" alt="Malory Connect"></div>
     </a>
-    <a class="brand" style="--a:90deg" data-name="WOW Logistics" data-deg="L · 090°" data-beam="#2f6bff"
+    <a class="brand" style="--a:90deg" data-name="WOW Logistics" data-deg="White-Glove Coast to Coast 🇺🇸" data-beam="#2f6bff"
        data-cta="toque de novo para acessar WOW Logistics" data-url="https://wowlognow.com" aria-label="WOW Logistics, leste">
       <div class="chip"><img src="/assets/logos/wowlog.png" alt="WOW Logistics"></div>
     </a>
-    <a class="brand" style="--a:270deg" data-name="Malory Entretenimento" data-deg="O · 270°" data-beam="#a855f7"
+    <a class="brand" style="--a:270deg" data-name="Malory Entretenimento" data-deg="Todo Grande Evento Exige Uma Grande Assinatura" data-beam="#a855f7"
        data-cta="toque de novo para acessar Malory Entretenimento" data-url="https://entretenimento.grupomalory.com" aria-label="Malory Entretenimento, oeste">
       <div class="chip"><img src="/assets/logos/malory-entretenimento-light.png" alt="Malory Entretenimento"></div>
     </a>
-    <a class="brand" style="--a:315deg" data-name="OxePay" data-deg="NO · 315°" data-beam="#f59e0b"
+    <a class="brand" style="--a:315deg" data-name="OxePay" data-deg="A Amarelinha Que Bota Pra Torar" data-beam="#f59e0b"
        data-cta="toque de novo para acessar OxePay" data-url="https://useoxepay.com.br" aria-label="OxePay, noroeste">
       <div class="chip"><img src="/assets/logos/oxepay.png" alt="OxePay"></div>
     </a>
