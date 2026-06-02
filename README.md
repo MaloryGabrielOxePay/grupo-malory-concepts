@@ -24,8 +24,9 @@ Single-page "redirector" do holding **Grupo Malory**. Uma bússola interativa: a
 
 ### Local (máquina do Gabriel)
 ```
-C:\Users\artau\.claude\projects\🥽 Agência Inteligente\Grupo Malory\output\site\v2\
+C:\Users\artau\.claude\projects\🥽 Agência Inteligente\Grupo Malory\output\site\Site Grupo Malory\
 ```
+> Renomeada de `v2/` → `Site Grupo Malory/` na atualização 2.0 (git/Vercel intactos — deploy é por repo, não pelo nome da pasta).
 
 ### GitHub
 ```
@@ -44,17 +45,18 @@ https://github.com/MaloryGabrielOxePay/grupo-malory-concepts
 ## 3. Estrutura de arquivos
 
 ```
-v2/
+Site Grupo Malory/        (renomeada de v2/ na 2.0)
 ├── index.html            ← 🟢 PRODUÇÃO. A bússola, servida em grupomalory.com/. NÃO editar direto.
+├── favicon.ico · favicon-16/32.png · apple-touch-icon.png · icon-192/512.png · site.webmanifest  ← favicon global (2.0)
 ├── preview/
 │   └── index.html        ← ✏️ EDITE AQUI. Cópia idêntica da produção. Vê em /preview/.
 ├── shared/
 │   ├── base.css          ← tokens/fontes/cores globais (Italiana, Spectral, JetBrains Mono; --canvas-deep, --paper…)
 │   └── init.js           ← bootstrap GSAP + Lenis (smooth scroll). Roda em todas as páginas.
 ├── assets/
-│   └── logos/            ← 6 PNGs com fundo transparente:
-│                            grupo-malory.png, iai.png, malory-connect.png,
-│                            wowlog.png, oxepay.png, malory-entretenimento-light.png
+│   ├── logos/            ← PNGs transparentes: grupo-malory.png, grupo-malory-round.png (badge central, 2.0),
+│   │                        iai.png, malory-connect.png, wowlog.png, oxepay.png, malory-entretenimento-light.png
+│   └── img/              ← globe-desktop.jpg · globe-mobile.jpg (NASA Black Marble, fundo do globo — 2.1)
 ├── brainstorm/
 │   └── index.html        ← página de mockup que comparou os 3 backgrounds (G1 Atlas, etc). Referência viva.
 ├── robots.txt            ← bloqueia /preview/ e /_archive/ de indexar no Google
@@ -79,14 +81,14 @@ v2/
 
 | Camada | z-index | pointer-events | Papel |
 |---|---|---|---|
-| `.atlas` (em `.atmos`) | 0 | none | **Background geral (G1)**: curvas topográficas SVG geradas por JS, giram devagar (`atlasDrift` 100s) |
+| `.atlas` (em `.atmos`) | 0 | none | **Background geral (G1)**: curvas topográficas SVG geradas por JS, giram devagar (`atlasDrift` 80s desktop · 48s mobile) + globo NASA por baixo |
 | `.grain` | 1 | none | textura de ruído sutil |
 | `.beacon` (`.layer`) | 0 | **none** | **Background do clique (C1)**: feixe cônico na cor da marca, gira p/ a direção tocada |
 | `.rose` (`.layer`) | auto | **none** | anel/ticks da bússola (SVG) |
 | `.brand` ×8 | 20 | **auto** | 🎯 as ÚNICAS coisas clicáveis (5 marcas + 3 contatos) |
 | `.needle` (`.layer`) | 25 | **none** | a agulha que gira (acima das logos de propósito) |
 | `.dial` | 30 | **none** | mostrador central + logo Grupo Malory |
-| `.hud` | 35 | none | nome/grau da marca selecionada |
+| `.hud` | 35 | none | nome + **slogan** da marca (Montserrat 800/600). `position:fixed`: desktop=direita, mobile=faixa inferior |
 
 > 🔑 **REGRA DE OURO:** só `.brand` tem `pointer-events:auto`. TODA camada decorativa (`.layer` = rose/needle/beacon, mais `.dial` e `.hud`) é `pointer-events:none`. Se isso quebrar, os toques morrem (ver Gotcha #1).
 
@@ -103,7 +105,7 @@ v2/
 **Edite SEMPRE `preview/index.html`. Nunca `index.html` direto.**
 
 ```bash
-cd "C:\Users\artau\.claude\projects\🥽 Agência Inteligente\Grupo Malory\output\site\v2"
+cd "C:\Users\artau\.claude\projects\🥽 Agência Inteligente\Grupo Malory\output\site\Site Grupo Malory"
 
 # 1. edite preview/index.html  (no editor)
 
@@ -123,7 +125,7 @@ git push origin master
 
 A produção só muda no passo 3. Enquanto você itera no preview, a home **não cai nem sofre interferência**.
 
-> **Preview local (última opção, sem internet):** na pasta `v2/` rode `python -m http.server 5173` e abra `http://localhost:5173/preview/`. Precisa servir pela raiz (os paths são `/shared`, `/assets`) — **não** abra o HTML por `file://`.
+> **Preview local (última opção, sem internet):** na pasta `Site Grupo Malory/` rode `python -m http.server 5173` e abra `http://localhost:5173/preview/`. Precisa servir pela raiz (os paths são `/shared`, `/assets`) — **não** abra o HTML por `file://`.
 
 ---
 
@@ -150,6 +152,7 @@ O domínio usa os nameservers do HostGator (`ns1122/ns1123.hostgator.com.br`); o
 - **Mudar URL de uma marca:** atribua `data-url="..."` no `<a class="brand" ...>` correspondente.
 - **Mudar cor do feixe de uma marca:** atribua `data-beam="#hex"` no mesmo `<a>`. (Tabela na seção 8.)
 - **Mudar texto do contato (WhatsApp/e-mail/Insta):** `data-name`, `data-deg`, `data-cta`, `data-url` no `<a class="brand contact">`.
+- **Mudar slogan de uma marca (2.0):** `data-deg` no `<a class="brand">` — agora guarda o **slogan** (ex.: "A Amarelinha Que Bota Pra Torar"), não mais o código de bússola.
 - **Posição no círculo:** `style="--a:Ndeg"` (0=N, 45=NE, 90=L, 135=SE, 180=S, 225=SO, 270=O, 315=NO).
 - **Fundo Atlas mais/menos visível:** `.atlas{ opacity }` (hoje `.18` desktop, `.15` mobile via media query).
 - **Beacon mais/menos forte:** `.beacon.show{ opacity }` (hoje `.66`) e `.beacon{ filter:blur() }`.
@@ -207,4 +210,5 @@ URLs atuais das marcas: iAÍ `iai.grupomalory.com` · Connect `maloryconnect.com
 
 ---
 
-*Última grande mudança: bússola vira produção · backgrounds Atlas+Beacon · fix do clique (pointer-events) · staging via `/preview/` · concepts antigos → `_archive/`.*
+*Última grande mudança (2.0 · 2026-06): favicon global · logo redonda no badge central · slogans no lugar dos códigos de bússola · HUD em Montserrat (desktop direita / mobile faixa inferior, `position:fixed`) · globo NASA Black Marble no fundo (2.1) · Atlas 80s/48s + mais visível no mobile · pasta renomeada `v2/` → `Site Grupo Malory/`.*
+*Anterior: bússola vira produção · backgrounds Atlas+Beacon · fix do clique (pointer-events) · staging via `/preview/` · concepts antigos → `_archive/`.*
