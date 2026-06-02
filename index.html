@@ -80,14 +80,14 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 .beacon{ position:absolute; inset:-72%; z-index:0; pointer-events:none;
   transform:rotate(var(--beam-angle,0deg)); transform-origin:50% 50%;
   background:conic-gradient(from 0deg at 50% 50%,
-     var(--beam,#ffd400) 0deg, rgba(0,0,0,0) 27deg,
-     rgba(0,0,0,0) 333deg, var(--beam,#ffd400) 360deg);
-  -webkit-mask:radial-gradient(closest-side, #000 5%, rgba(0,0,0,.82) 22%, rgba(0,0,0,0) 60%);
-          mask:radial-gradient(closest-side, #000 5%, rgba(0,0,0,.82) 22%, rgba(0,0,0,0) 60%);
-  filter:blur(18px); opacity:0;
+     var(--beam,#ffd400) 0deg, rgba(0,0,0,0) 64deg,
+     rgba(0,0,0,0) 296deg, var(--beam,#ffd400) 360deg);
+  -webkit-mask:radial-gradient(closest-side, #000 0%, rgba(0,0,0,.5) 34%, rgba(0,0,0,0) 70%);
+          mask:radial-gradient(closest-side, #000 0%, rgba(0,0,0,.5) 34%, rgba(0,0,0,0) 70%);
+  filter:blur(50px); opacity:0;
   transition:opacity .55s ease, transform .85s cubic-bezier(.16,1,.3,1);
   will-change:opacity, transform; }
-.beacon.show{ opacity:.66 }
+.beacon.show{ opacity:.5 }
 
 /* AGULHA — ACIMA das logos (z 25), abaixo do mostrador central (z 30) */
 .needle{ transform-origin:50% 50%; will-change:transform; z-index:25 }
@@ -112,6 +112,7 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
   font-size:clamp(19px,5.2vw,30px); letter-spacing:-.01em; line-height:1.05; color:var(--hud-name); }
 .hud .h-deg{ font-family:'Montserrat',system-ui,sans-serif; font-weight:600; font-style:normal;
   font-size:clamp(12px,3.4vw,15px); letter-spacing:.005em; line-height:1.22; color:rgba(232,232,236,.74); margin-top:7px; }
+.hud .h-deg .flag{ height:.95em; width:auto; display:inline-block; vertical-align:-.14em; margin-left:.18em; }
 
 .brand{ position:absolute; top:50%; left:50%; width:var(--chip); display:grid; place-items:center;
   text-decoration:none; cursor:pointer; z-index:20; pointer-events:auto; -webkit-tap-highlight-color:transparent;
@@ -159,10 +160,10 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
 @media (max-width:560px){
   :root{ --size: clamp(280px, min(92vw, 70vh), 560px); }
-  .beacon{ filter:blur(14px); inset:-58% }
-  .atlas{ opacity:.26 }                 /* mais visivel / menos escuro no celular */
+  .beacon{ filter:blur(34px); inset:-58% }
+  .atlas{ opacity:.34 }                 /* mais visivel / menos escuro no celular */
   .atlas-rot{ animation-duration:48s }  /* mais rapido -> movimento perceptivel */
-  .globe{ background-image:url(/assets/img/globe-mobile.jpg); opacity:.15 }
+  .globe{ background-image:url(/assets/img/globe-mobile.jpg); opacity:.2 }
   .hud{ bottom:calc(env(safe-area-inset-bottom) + 148px); }  /* faixa limpa: abaixo dos contatos, acima do hint */
 }
 
@@ -310,8 +311,11 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
     if(navigator.vibrate){ try{navigator.vibrate(14);}catch(e){} } }
   function clearActive(){ brands.forEach(function(b){b.classList.remove('active');}); hud.classList.remove('show');
     if(beacon){ beacon.classList.remove('show'); } armed=null; }
+  function flagize(s){ return s
+    .replace(/🇧🇷/g,'<img class="flag" alt="BR" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/1f1e7-1f1f7.png">')
+    .replace(/🇺🇸/g,'<img class="flag" alt="US" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/1f1fa-1f1f8.png">'); }
   function arm(b){ brands.forEach(function(x){x.classList.toggle('active',x===b);});
-    hudName.textContent=b.dataset.name; hudDeg.textContent=b.dataset.deg; hud.classList.add('show');
+    hudName.textContent=b.dataset.name; hudDeg.innerHTML=flagize(b.dataset.deg); hud.classList.add('show');
     var beam=b.dataset.beam||'#f2f2f4'; b.style.setProperty('--chip-glow', beam);
     if(beacon){ beacon.style.setProperty('--beam', beam); beacon.classList.add('show'); }
     pointTo(parseFloat(b.style.getPropertyValue('--a')));
