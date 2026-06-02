@@ -352,7 +352,7 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
   var seen=false; try{ seen=sessionStorage.getItem('mc_intro')==='1'; }catch(e){}
   function boot(){
-    if(seen || reduce || !hasGSAP){ showFinal(); }
+    if(reduce || !hasGSAP){ showFinal(); }
     else { runIntro(); try{ sessionStorage.setItem('mc_intro','1'); }catch(e){}
       /* rede de segurança: se a intro travar (aba em background, rAF lento),
          libera o estado final e desbloqueia os cliques mesmo assim */
