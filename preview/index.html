@@ -17,7 +17,7 @@
   --R: calc(var(--size) * 0.365);
   --disc: calc(var(--size) * 0.30);
   --chip: calc(var(--size) * 0.20);
-  --contact: calc(var(--size) * 0.135);
+  --contact: max(44px, calc(var(--size) * 0.135));  /* alvo de toque nunca abaixo de 44px */
   --ink: var(--canvas-deep);
   --line: rgba(232,232,236,.16);
   --line-dim: rgba(232,232,236,.07);
@@ -30,9 +30,10 @@
   --hud-name: #f4f4f6;
   --hud-deg: rgba(232,232,236,.5);
   --hint: rgba(232,232,236,.55);
-  /* paleta por direção (feixe do clique) — iAÍ N · Connect NE · WOW L
-     · OxePay NO · Entret. O · WhatsApp SO · E-mail S · Instagram SE */
-  --beam-iai:#ffd400; --beam-connect:#ff6a3d; --beam-wow:#2f6bff;
+  /* paleta por direção (feixe do clique) — 9 pontos a cada 40°:
+     Sobre 0 · iAÍ 40 · Connect 80 · WOW 120 · Instagram 160 · E-mail 200
+     · WhatsApp 240 · Entret. 280 · OxePay 320 */
+  --beam-sobre:#0295d7; --beam-iai:#ffd400; --beam-connect:#ff6a3d; --beam-wow:#2f6bff;
   --beam-oxe:#f59e0b; --beam-ent:#a855f7;
   --beam-wa:#25d366; --beam-mail:#38bdf8; --beam-ig:#e1306c;
 }
@@ -121,6 +122,9 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
   padding:calc(var(--size)*.02); border:1px solid transparent;
   transition:transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease, box-shadow .4s ease; }
 .brand .chip img{ max-width:100%; max-height:100%; display:block }
+/* selo redondo (Sobre): disco vetorial centrado, casa com o anel circular do pulso */
+.brand.round .chip img{ width:80%; height:auto; aspect-ratio:1/1; border-radius:50%;
+  box-shadow:0 0 0 1px rgba(232,232,236,.18), 0 6px 22px -6px rgba(2,149,215,.55) }
 .brand:hover .chip{ transform:scale(1.05) }
 .brand.active .chip{ transform:scale(1.12); border-color:rgba(232,232,236,.6);
   box-shadow:0 0 46px -2px var(--chip-glow, rgba(232,232,236,.5)) }
@@ -145,7 +149,7 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 .skip.show{ opacity:1 } .skip:hover{ color:#fff }
 
 .hint{ position:absolute; left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); transform:translateX(-50%);
-  z-index:40; text-align:center; white-space:normal; max-width:86vw;
+  z-index:40; text-align:center; white-space:normal; width:max-content; max-width:86vw;  /* max-content: sem isso o left:50% corta a largura pela metade e a dica quebra em 2 linhas no celular */
   font-family:'Italiana','Spectral',serif; font-style:italic; font-size:clamp(14px,3.6vw,17px);
   color:var(--hint); opacity:0; transition:opacity .5s ease; padding:0 16px; }
 .hint.show{ opacity:1 }
@@ -173,6 +177,16 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
         width:min(30vw, calc(50vw - var(--size)/2 - clamp(28px,4vw,72px))); }
   .hud .h-name{ font-size:clamp(24px,2.4vw,40px); }
   .hud .h-deg{ font-size:clamp(13px,1.15vw,17px); margin-top:10px; }
+}
+
+@media (orientation:landscape) and (min-width:640px) and (max-width:1023px){
+  /* celular deitado / janela baixa: a faixa inferior cobria os contatos. Nome+slogan vão para a
+     lateral direita, e a bússola cede largura para garantir ~200px de coluna ao lado dela. */
+  :root{ --size: clamp(260px, min(86vw, 78vh, calc(100vw - 400px)), 600px); }
+  .hud{ left:calc(50% + var(--size)/2 + 18px); right:auto; bottom:auto; top:50%;
+        transform:translateY(-50%); text-align:left; width:calc(50vw - var(--size)/2 - 34px); }
+  .hud .h-name{ font-size:clamp(17px,2.4vw,26px); }
+  .hud .h-deg{ font-size:12px; margin-top:6px; }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -220,42 +234,55 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
 
     <div class="hud" id="hud"><div class="h-name" id="hudName"></div><div class="h-deg" id="hudDeg"></div></div>
 
-    <a class="brand hero" style="--a:0deg" data-name="IAÍ" data-deg="Agência Inteligente 🇧🇷" data-beam="#ffd400"
-       data-cta="toque de novo para acessar IAÍ" data-url="https://iai.grupomalory.com" aria-label="IAÍ, norte, negócio principal">
+    <a class="brand hero round" style="--a:0deg" data-name="Sobre Malory" data-deg="Trajetória e atuação em João Pessoa 🇧🇷" data-beam="#0295d7"
+       href="https://sobre.grupomalory.com" target="_blank" rel="noopener"
+       data-cta="toque de novo para conhecer Malory" data-url="https://sobre.grupomalory.com" aria-label="Sobre Malory, norte, destaque">
+      <div class="chip"><img src="/assets/logos/sobre-malory.svg" alt="Sobre Malory"></div>
+    </a>
+    <a class="brand" style="--a:40deg" data-name="IAÍ" data-deg="Agência Inteligente 🇧🇷" data-beam="#ffd400"
+       href="https://iai.grupomalory.com" target="_blank" rel="noopener"
+       data-cta="toque de novo para acessar IAÍ" data-url="https://iai.grupomalory.com" aria-label="IAÍ">
       <div class="chip"><img src="/assets/logos/iai.png" alt="IAÍ"></div>
     </a>
-    <a class="brand" style="--a:45deg" data-name="Malory Connect" data-deg="Care You Can Track 🇺🇸" data-beam="#ff6a3d"
-       data-cta="toque de novo para acessar Malory Connect" data-url="https://maloryconnect.com" aria-label="Malory Connect, nordeste">
+    <a class="brand" style="--a:80deg" data-name="Malory Connect" data-deg="Care You Can Track 🇺🇸" data-beam="#ff6a3d"
+       href="https://maloryconnect.com" target="_blank" rel="noopener"
+       data-cta="toque de novo para acessar Malory Connect" data-url="https://maloryconnect.com" aria-label="Malory Connect">
       <div class="chip"><img src="/assets/logos/malory-connect.png" alt="Malory Connect"></div>
     </a>
-    <a class="brand" style="--a:90deg" data-name="WOW Logistics" data-deg="White-Glove Coast to Coast 🇺🇸" data-beam="#2f6bff"
-       data-cta="toque de novo para acessar WOW Logistics" data-url="https://wowlognow.com" aria-label="WOW Logistics, leste">
+    <a class="brand" style="--a:120deg" data-name="WOW Logistics" data-deg="White-Glove Coast to Coast 🇺🇸" data-beam="#2f6bff"
+       href="https://wowlognow.com" target="_blank" rel="noopener"
+       data-cta="toque de novo para acessar WOW Logistics" data-url="https://wowlognow.com" aria-label="WOW Logistics">
       <div class="chip"><img src="/assets/logos/wowlog.png" alt="WOW Logistics"></div>
     </a>
-    <a class="brand" style="--a:270deg" data-name="Malory Entretenimento" data-deg="Todo Grande Evento Exige Uma Grande Assinatura 🇧🇷" data-beam="#a855f7"
-       data-cta="toque de novo para acessar Malory Entretenimento" data-url="https://entretenimento.grupomalory.com" aria-label="Malory Entretenimento, oeste">
+    <a class="brand" style="--a:280deg" data-name="Malory Entretenimento" data-deg="Todo Grande Evento Exige Uma Grande Assinatura 🇧🇷" data-beam="#a855f7"
+       href="https://entretenimento.grupomalory.com" target="_blank" rel="noopener"
+       data-cta="toque de novo para acessar Malory Entretenimento" data-url="https://entretenimento.grupomalory.com" aria-label="Malory Entretenimento">
       <div class="chip"><img src="/assets/logos/malory-entretenimento-light.png" alt="Malory Entretenimento"></div>
     </a>
-    <a class="brand" style="--a:315deg" data-name="OxePay" data-deg="A Amarelinha Que Bota Pra Torar 🇧🇷" data-beam="#f59e0b"
-       data-cta="toque de novo para acessar OxePay" data-url="https://useoxepay.com.br" aria-label="OxePay, noroeste">
+    <a class="brand" style="--a:320deg" data-name="OxePay" data-deg="A Amarelinha Que Bota Pra Torar 🇧🇷" data-beam="#f59e0b"
+       href="https://useoxepay.com.br" target="_blank" rel="noopener"
+       data-cta="toque de novo para acessar OxePay" data-url="https://useoxepay.com.br" aria-label="OxePay">
       <div class="chip"><img src="/assets/logos/oxepay.png" alt="OxePay"></div>
     </a>
 
-    <a class="brand contact" style="--a:225deg" data-name="WhatsApp" data-deg="+55 83 99806-0678" data-beam="#25d366"
+    <a class="brand contact" style="--a:240deg" data-name="WhatsApp" data-deg="+55 83 99806-0678" data-beam="#25d366"
+       href="https://wa.me/5583998060678" target="_blank" rel="noopener"
        data-cta="toque de novo para falar com Malory no WhatsApp" data-url="https://wa.me/5583998060678" aria-label="WhatsApp">
       <div class="chip"><svg viewBox="0 0 48 48">
         <path d="M8.5 39.5l2.2-7.6A15.5 15.5 0 1 1 16.6 37.4L8.5 39.5Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
         <path d="M19.2 16.9c-.3-.7-.6-.7-.9-.7h-.8c-.3 0-.8.1-1.2.5-.4.5-1.6 1.6-1.6 3.8s1.6 4.4 1.8 4.7c.2.3 3.1 4.9 7.6 6.7 3.7 1.4 4.5 1.2 5.3 1.1.8-.1 2.6-1.1 3-2.1.4-1 .4-1.9.3-2.1-.1-.2-.4-.3-.9-.5-.5-.2-2.6-1.3-3-1.4-.4-.2-.7-.2-1 .2-.3.5-1.1 1.4-1.3 1.7-.2.2-.5.3-.9.1-.5-.2-1.9-.7-3.6-2.2-1.3-1.2-2.2-2.6-2.5-3.1-.2-.5 0-.7.2-.9.2-.2.5-.5.7-.8.2-.3.3-.5.5-.8.1-.3.1-.5 0-.7-.1-.2-.9-2.3-1.3-3.1Z" fill="currentColor"/>
       </svg></div>
     </a>
-    <a class="brand contact" style="--a:180deg" data-name="E-mail" data-deg="gabriel@grupomalory.com" data-beam="#38bdf8"
+    <a class="brand contact" style="--a:200deg" data-name="E-mail" data-deg="gabriel@grupomalory.com" data-beam="#38bdf8"
+       href="mailto:gabriel@grupomalory.com"
        data-cta="toque de novo para nos enviar um e-mail" data-url="mailto:gabriel@grupomalory.com" aria-label="E-mail">
       <div class="chip"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
         <rect x="6" y="11" width="36" height="26" rx="3.5"/>
         <path d="M7.5 13.5 24 26.5 40.5 13.5"/>
       </svg></div>
     </a>
-    <a class="brand contact" style="--a:135deg" data-name="Instagram" data-deg="@eumalory" data-beam="#e1306c"
+    <a class="brand contact" style="--a:160deg" data-name="Instagram" data-deg="@eumalory" data-beam="#e1306c"
+       href="https://instagram.com/eumalory" target="_blank" rel="noopener"
        data-cta="toque de novo para acessar o Insta de Malory" data-url="https://instagram.com/eumalory" aria-label="Instagram">
       <div class="chip"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4">
         <rect x="9" y="9" width="30" height="30" rx="8.5"/>
@@ -319,12 +346,21 @@ body{ background:var(--ink); color:var(--paper); overflow:hidden; }
     if(beacon){ beacon.style.setProperty('--beam', beam); beacon.classList.add('show'); }
     pointTo(parseFloat(b.style.getPropertyValue('--a')));
     hint.textContent=b.dataset.cta; hint.classList.add('show'); armed=b; }
-  function openBrand(b){ if(b.dataset.url.indexOf('mailto:')===0){ window.location.href=b.dataset.url; } else { window.open(b.dataset.url,'_blank'); } }
-  function handle(b){ if(lock){ showFinal(); } if(armed===b) openBrand(b); else arm(b); }
-
+  /* Cada .brand é um <a href> real. O 1º toque só arma a bússola (preventDefault);
+     no 2º toque deixamos o clique nativo seguir o href — window.open(url,'_blank')
+     era engolido pelo bloqueador de pop-up em mobile e em webview (Instagram/WhatsApp). */
   brands.forEach(function(b){
-    b.addEventListener('click',function(e){ e.preventDefault(); handle(b); });
-    b.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); handle(b); } });
+    b.addEventListener('click',function(e){
+      if(lock){ showFinal(); }
+      if(armed===b) return;                /* armado: navegação nativa assume */
+      e.preventDefault(); arm(b);
+    });
+    b.addEventListener('keydown',function(e){
+      if(e.key!=='Enter' && e.key!==' ') return;
+      if(lock){ showFinal(); }
+      if(armed===b){ if(e.key===' '){ e.preventDefault(); b.click(); } return; }
+      e.preventDefault(); arm(b);
+    });
   });
   page.addEventListener('click',function(e){ if(lock){ showFinal(); return; }
     if(!e.target.closest('.brand')){ if(armed){ clearActive(); pointTo(0,0.8); hint.textContent='aponte para uma direção'; } } });

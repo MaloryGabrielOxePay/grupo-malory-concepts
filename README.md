@@ -55,6 +55,7 @@ Site Grupo Malory/        (renomeada de v2/ na 2.0)
 │   └── init.js           ← bootstrap GSAP + Lenis (smooth scroll). Roda em todas as páginas.
 ├── assets/
 │   ├── logos/            ← PNGs transparentes: grupo-malory.png, grupo-malory-round.png (badge central, 2.0),
+│   │                        sobre-malory.svg (selo redondo do Sobre, 2.2),
 │   │                        iai.png, malory-connect.png, wowlog.png, oxepay.png, malory-entretenimento-light.png
 │   └── img/              ← globe-desktop.jpg · globe-mobile.jpg (NASA Black Marble, fundo do globo — 2.1)
 ├── brainstorm/
@@ -85,7 +86,7 @@ Site Grupo Malory/        (renomeada de v2/ na 2.0)
 | `.grain` | 1 | none | textura de ruído sutil |
 | `.beacon` (`.layer`) | 0 | **none** | **Background do clique (C1)**: feixe cônico na cor da marca, gira p/ a direção tocada |
 | `.rose` (`.layer`) | auto | **none** | anel/ticks da bússola (SVG) |
-| `.brand` ×8 | 20 | **auto** | 🎯 as ÚNICAS coisas clicáveis (5 marcas + 3 contatos) |
+| `.brand` ×9 | 20 | **auto** | 🎯 as ÚNICAS coisas clicáveis (Sobre + 5 marcas + 3 contatos) |
 | `.needle` (`.layer`) | 25 | **none** | a agulha que gira (acima das logos de propósito) |
 | `.dial` | 30 | **none** | mostrador central + logo Grupo Malory |
 | `.hud` | 35 | none | nome + **slogan** da marca (Montserrat 800/600). `position:fixed`: desktop=direita, mobile=faixa inferior |
@@ -96,7 +97,7 @@ Site Grupo Malory/        (renomeada de v2/ na 2.0)
 
 **Interação (two-tap):** 1º toque numa marca = "arma" (agulha aponta + beacon acende + HUD mostra nome). 2º toque na mesma = abre o link. Tocar fora = reseta. E-mail abre `mailto:`; resto abre nova aba.
 
-**Intro:** na 1ª visita da sessão a agulha gira ~3 voltas e trava ao norte (iAÍ). `sessionStorage('mc_intro')` evita repetir. Botão "pular intro". Há **rede de segurança** (timeout 3.5s + `visibilitychange` + tap-durante-intro) que destrava tudo se a animação travar (ver Gotcha #2).
+**Intro:** na 1ª visita da sessão a agulha gira ~3 voltas e trava ao norte (Sobre Malory). `sessionStorage('mc_intro')` evita repetir. Botão "pular intro". Há **rede de segurança** (timeout 3.5s + `visibilitychange` + tap-durante-intro) que destrava tudo se a animação travar (ver Gotcha #2).
 
 ---
 
@@ -153,7 +154,7 @@ O domínio usa os nameservers do HostGator (`ns1122/ns1123.hostgator.com.br`); o
 - **Mudar cor do feixe de uma marca:** atribua `data-beam="#hex"` no mesmo `<a>`. (Tabela na seção 8.)
 - **Mudar texto do contato (WhatsApp/e-mail/Insta):** `data-name`, `data-deg`, `data-cta`, `data-url` no `<a class="brand contact">`.
 - **Mudar slogan de uma marca (2.0):** `data-deg` no `<a class="brand">` — agora guarda o **slogan** (ex.: "A Amarelinha Que Bota Pra Torar"), não mais o código de bússola.
-- **Posição no círculo:** `style="--a:Ndeg"` (0=N, 45=NE, 90=L, 135=SE, 180=S, 225=SO, 270=O, 315=NO).
+- **Posição no círculo:** `style="--a:Ndeg"`. Desde a 2.2 são 9 pontos a cada 40° (0, 40, 80 … 320), 0 = norte. Mudou a quantidade de itens? Redistribua `360/N` graus e rode a checagem da seção 9 (Gotcha #6).
 - **Fundo Atlas mais/menos visível:** `.atlas{ opacity }` (hoje `.18` desktop, `.15` mobile via media query).
 - **Beacon mais/menos forte:** `.beacon.show{ opacity }` (hoje `.66`) e `.beacon{ filter:blur() }`.
 
@@ -161,18 +162,19 @@ O domínio usa os nameservers do HostGator (`ns1122/ns1123.hostgator.com.br`); o
 
 ## 8. Paleta dos beacons (cor por direção)
 
-| Marca / contato | Direção | `--a` | `data-beam` |
+| Marca / contato | Posição | `--a` | `data-beam` |
 |---|---|---|---|
-| iAÍ | N | 0° | `#ffd400` |
-| Malory Connect | NE | 45° | `#ff6a3d` |
-| WOW Logistics | L | 90° | `#2f6bff` |
-| Instagram | SE | 135° | `#e1306c` |
-| E-mail | S | 180° | `#38bdf8` |
-| WhatsApp | SO | 225° | `#25d366` |
-| Malory Entretenimento | O | 270° | `#a855f7` |
-| OxePay | NO | 315° | `#f59e0b` |
+| **Sobre Malory** (destaque, pulso) | N | 0° | `#0295d7` |
+| iAÍ | NE | 40° | `#ffd400` |
+| Malory Connect | L-NE | 80° | `#ff6a3d` |
+| WOW Logistics | L-SE | 120° | `#2f6bff` |
+| Instagram | S-SE | 160° | `#e1306c` |
+| E-mail | S-SO | 200° | `#38bdf8` |
+| WhatsApp | SO | 240° | `#25d366` |
+| Malory Entretenimento | O-NO | 280° | `#a855f7` |
+| OxePay | NO | 320° | `#f59e0b` |
 
-URLs atuais das marcas: iAÍ `iai.grupomalory.com` · Connect `maloryconnect.com` · WOW `wowlognow.com` · Entret. `entretenimento.grupomalory.com` · OxePay `useoxepay.com.br` · WhatsApp `wa.me/5583998060678` · E-mail `gabriel@grupomalory.com` · Insta `instagram.com/eumalory`.
+URLs atuais das marcas: Sobre `sobre.grupomalory.com` · iAÍ `iai.grupomalory.com` · Connect `maloryconnect.com` · WOW `wowlognow.com` · Entret. `entretenimento.grupomalory.com` · OxePay `useoxepay.com.br` · WhatsApp `wa.me/5583998060678` · E-mail `gabriel@grupomalory.com` · Insta `instagram.com/eumalory`.
 
 ---
 
@@ -183,6 +185,7 @@ URLs atuais das marcas: iAÍ `iai.grupomalory.com` · Connect `maloryconnect.com
 3. **`prefers-reduced-motion`:** se ligado no aparelho, a intro é pulada (ok) e antes travava o Atlas. O Atlas hoje gira mesmo com reduced-motion (escolha do dono). 
 4. **DNS:** IP Vercel é `76.76.21.21`. Registros A do mesmo nome precisam de **TTL igual** (TTL misto trava a zona → SERVFAIL). Um nome com **CNAME não pode ter registro A** junto (erro "CNAME and other data"). Nunca apague MX/SPF/DKIM do Titan.
 5. **Paridade preview↔prod:** mantenha os paths root-absolute (`/shared`, `/assets`). Se divergir, promover deixa de ser cópia limpa.
+6. **Responsivo (2.2):** com 9 itens, o texto de nome+slogan (`.hud`) cobria os contatos no celular deitado e em janela pequena. Hoje: retrato = faixa inferior; paisagem ≥640px = coluna à direita da bússola (a bússola cede largura: `calc(100vw - 400px)`). Contatos têm piso de 44px (`--contact: max(44px, …)`) e a dica usa `width:max-content` (sem isso quebrava em 2 linhas). Checagem que valida tudo: em 360×740, 390×844, 430×932, 667×375, 844×390, 768×1024, 800×600 e 1440×900, `scrollWidth == innerWidth`, cada chip dentro da tela e achado por `elementFromPoint` no centro, e o `.hud` de cada marca armada sem tocar em chip, dial ou dica.
 
 ---
 
